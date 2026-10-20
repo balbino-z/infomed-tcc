@@ -18,7 +18,7 @@ Projeto Integrador II; Modelagem de Padrões de Projetos (Repository feito; Obse
 
 ## 3. Stack (decidida, não trocar sem ADR)
 
-React 18 · Vite · TypeScript · Tailwind CSS v4 · Supabase (PostgreSQL, Auth, RLS, Edge Functions) · Leaflet + OpenStreetMap (a fazer) · Vitest + Testing Library · GitHub / GitHub Actions (a fazer) · PWA (Capacitor só se necessário).
+React 18 · Vite · TypeScript · Tailwind CSS v4 · Supabase (PostgreSQL, Auth, RLS, Edge Functions) · Leaflet + OpenStreetMap (a fazer) · Vitest + Testing Library · GitHub / GitHub Actions (a fazer) · PWA com `vite-plugin-pwa` (feito) · Vercel para hospedagem (ADR-009) · Capacitor/APK só como bônus; iOS fora do escopo.
 
 Origem do front: protótipo gerado no Figma Make e refatorado (ver `docs/decisions/ADR-002`). As telas em `components/screens` vieram de lá; componentes em `components/ui` são do Figma Make (muitos sem uso).
 
@@ -26,7 +26,7 @@ Origem do front: protótipo gerado no Figma Make e refatorado (ver `docs/decisio
 
 ```
 src/app/
-  App.tsx                 navegação por estado (useState) — migração para react-router é a tarefa T6
+  App.tsx                 navegação por estado (useState) — migração para react-router é a tarefa T6; moldura de iPhone só em telas md+
   components/screens/     20 telas (Welcome, Onboarding1-3, Login, Signup, Home, MedicationList,
                           MedicationDetail, PostosList, PostoDetail, Schedule*, AppointmentConfirmed,
                           CancelAppointment, Notifications, History, Reminders, CreateReminder,
@@ -76,13 +76,13 @@ Vitest está fixado na versão 3 (a 4+/5 exige Vite mais novo que o do projeto).
 
 ## 8. Estado atual (conferir em docs/PROGRESSO.md)
 
-Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; ADRs 001-008; fichas F01-F04.
+Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado (manifesto, service worker, ícones, tela cheia no celular); ADRs 001-009; fichas F01-F05.
 Pendente de confirmação no ambiente real: login/cadastro no navegador, `db/04_auth.sql` no Supabase, teste de RLS com 2 contas (prints em `docs/evidence`).
 Pendente de construção: T3 em diante (ver seção 9).
 
 ## 9. Fila de tarefas
 
-T1 confirmar auth real + prints · T2 teste RLS com 2 contas · T3 unidades reais de Santa Bárbara d'Oeste (CNES/OpenStreetMap/prefeitura, conferir manualmente, `db/05_postos_reais.sql`) · T4 `HealthUnitRepository` + telas de Postos lendo do banco · T5 mapa Leaflet · T6 react-router + remover moldura de iPhone no celular · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1 confirmar auth real + prints · T2 teste RLS com 2 contas · T3 unidades reais de Santa Bárbara d'Oeste (CNES/OpenStreetMap/prefeitura, conferir manualmente, `db/05_postos_reais.sql`) · T4 `HealthUnitRepository` + telas de Postos lendo do banco · T5 mapa Leaflet · T6 react-router (a moldura de iPhone já some no celular) · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 

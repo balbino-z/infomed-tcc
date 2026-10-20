@@ -59,4 +59,16 @@
 **Pendências:** testar cadastro/login no navegador com o Supabase real; desativar "Confirm email" no painel para a demonstração; teste de RLS com 2 contas; prints em `docs/evidence`.
 **Próximo passo sugerido:** T1, T2 e depois T3 (unidades reais de Santa Bárbara d'Oeste).
 
-### Sessão 5 — (a preencher) — (nome)
+### Sessão 5 — 20/10/2026 — dono do repositório
+**Tarefa:** PWA e publicação na Vercel (antecipada em relação à fila)
+**Feito (código entregue):**
+- `vite-plugin-pwa` com manifesto (nome, cores, ícones, `standalone`) e service worker com atualização automática; só a interface é guardada em cache, dados do Supabase sempre pela rede.
+- Ícones do app (192, 512, maskable, apple-touch, favicon) em `public/`; `index.html` com metadados de tema e iOS.
+- `App.tsx`: moldura de iPhone só em telas largas (`md+`); no celular o app ocupa a tela toda (`100dvh`). Isso resolve a parte da moldura da T6; **react-router continua pendente**.
+- ADR-009 (PWA e Vercel) e ficha F05.
+**Testes:** tsc ok, 4 testes ok, build ok (manifesto e service worker gerados).
+**Pendências:** instalar `vite-plugin-pwa` (`npm install -D vite-plugin-pwa`), publicar na Vercel com as variáveis do `.env`, ajustar URL no Supabase (Authentication → URL Configuration), testar a instalação no celular, prints em `docs/evidence`.
+**Atenção:** a Vercel (plano gratuito) bloqueia deploys de commits de outras contas em repositório privado. Decidir: repositório público, só o dono comita na `main`, ou outra hospedagem.
+**Próximo passo sugerido:** T3 (unidades reais de Santa Bárbara d'Oeste).
+
+### Sessão 6 — (a preencher) — (nome)

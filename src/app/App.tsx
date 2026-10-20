@@ -143,15 +143,16 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#2c2f33] flex items-center justify-center p-4">
-      <div className="relative w-[393px] h-[852px]">
-        {/* iPhone Bezel Frame */}
-        <div className="absolute inset-0 pointer-events-none z-50">
+    // Celular: o app ocupa a tela toda. Computador (md+): mostra a moldura de iPhone.
+    <div className="h-[100dvh] w-full bg-white md:h-auto md:min-h-screen md:bg-[#2c2f33] md:flex md:items-center md:justify-center md:p-4">
+      <div className="relative h-full w-full md:w-[393px] md:h-[852px]">
+        {/* Moldura de iPhone (só no computador) */}
+        <div className="hidden md:block absolute inset-0 pointer-events-none z-50">
           <IPhoneBezel />
         </div>
-        
-        {/* App Content */}
-        <div className="absolute inset-0 overflow-hidden rounded-[55px]">
+
+        {/* Conteúdo do app */}
+        <div className="absolute inset-0 overflow-hidden md:rounded-[55px]">
           <div className="h-full w-full bg-white">
             {renderScreen()}
           </div>
