@@ -1,0 +1,8 @@
+# ADR-003: Padrão Repository
+
+**Contexto:** as telas tinham os dados fixos dentro do próprio arquivo.
+**Decisão:** criar a interface MedicationRepository e uma implementação Mock;
+as telas dependem só da interface.
+**Alternativas:** chamar o Supabase direto nas telas.
+**Consequência:** dá para trocar Mock por Supabase mudando só o repositories/index.ts,
+e testar sem banco.
