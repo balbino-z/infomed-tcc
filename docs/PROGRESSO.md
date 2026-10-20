@@ -71,4 +71,17 @@
 **Atenção:** a Vercel (plano gratuito) bloqueia deploys de commits de outras contas em repositório privado. Decidir: repositório público, só o dono comita na `main`, ou outra hospedagem.
 **Próximo passo sugerido:** T3 (unidades reais de Santa Bárbara d'Oeste).
 
-### Sessão 6 — (a preencher) — (nome)
+### Sessão 6 — 20/10/2026 — dono do repositório
+**Tarefa:** T3 (unidades reais de Santa Bárbara d'Oeste) — levantamento e ferramentas
+**Feito:**
+- PWA publicado na Vercel (corrigido: `node_modules` tinha ido para o Git; removido e `.gitignore` ajustado).
+- Levantamento nas fontes oficiais da Prefeitura: 15 UBS (nome, endereço, telefone, horário, serviços) em `data/unidades-sbo.json`.
+- UBS Vista Alegre excluída (fechada desde 2020, segundo reportagem de 2026); UBS Regional Zona Sul incluída.
+- Scripts: `scripts/geocode-unidades.mjs` (coordenadas via OpenStreetMap) e `scripts/gerar-sql-unidades.mjs` (gera `db/05_postos_reais.sql`).
+- Documentação das fontes, divergências e dados simulados em `docs/data/fontes-unidades.md`.
+**SQL novo para rodar no Supabase:** `db/05_postos_reais.sql` — **ainda não gerado**; depende de rodar o geocoder e conferir os pontos. Apaga unidades, estoque, médicos e consultas de teste antigos.
+**Testes:** gerador e SQL validados em PostgreSQL local (com coordenadas de teste); geocoder validado com respostas simuladas.
+**Pendências:** rodar o geocoder na máquina do dev, conferir os 15 pontos no mapa, resolver as 4 divergências de endereço (ver docs/data/fontes-unidades.md), gerar e rodar o SQL.
+**Próximo passo sugerido:** T4 (`HealthUnitRepository` e telas de Postos lendo do banco).
+
+### Sessão 7 — (a preencher) — (nome)

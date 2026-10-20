@@ -39,7 +39,8 @@ src/app/
     index.ts              ÚNICO lugar que escolhe Mock ou Supabase (pela existência do .env)
   features/auth/          AuthContext (estado de login) + auth.test.tsx
   lib/supabase.ts         cliente Supabase (null sem .env)
-db/                       01_schema.sql, 02_seed.sql, 03_teste_rls.sql, 04_auth.sql (numerados)
+db/                       01_schema.sql, 02_seed.sql, 03_teste_rls.sql, 04_auth.sql, (05_postos_reais.sql gerado por script) — numerados
+data/ e scripts/          dados das UBS reais e scripts que geram o SQL (T3)
 docs/                     decisions (ADR-001..008), features (F01..F04), diagrams, security, evidence, PROGRESSO.md
 ```
 
@@ -82,7 +83,7 @@ Pendente de construção: T3 em diante (ver seção 9).
 
 ## 9. Fila de tarefas
 
-T1 confirmar auth real + prints · T2 teste RLS com 2 contas · T3 unidades reais de Santa Bárbara d'Oeste (CNES/OpenStreetMap/prefeitura, conferir manualmente, `db/05_postos_reais.sql`) · T4 `HealthUnitRepository` + telas de Postos lendo do banco · T5 mapa Leaflet · T6 react-router (a moldura de iPhone já some no celular) · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1 confirmar auth real + prints · T2 teste RLS com 2 contas · T3 unidades reais de Santa Bárbara d'Oeste (**em andamento**: dados em `data/unidades-sbo.json`, fontes em `docs/data/fontes-unidades.md`; falta rodar `scripts/geocode-unidades.mjs`, conferir pontos e gerar/rodar `db/05_postos_reais.sql`) · T4 `HealthUnitRepository` + telas de Postos lendo do banco · T5 mapa Leaflet · T6 react-router (a moldura de iPhone já some no celular) · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 
