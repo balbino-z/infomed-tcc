@@ -2,9 +2,10 @@ import { User, Mail, Phone, MapPin, Calendar, Bell, Lock, HelpCircle, LogOut, Ch
 import { Screen } from '../../App';
 import { Header } from '../shared/Header';
 import { BottomNav } from '../shared/BottomNav';
+import { useAuth } from '../../features/auth/AuthContext';
 
 interface ProfileProps {
-  navigate: (screen: Screen) => void;
+  navigate: (screen: Screen, data?: any) => void;
 }
 
 const menuItems = [
@@ -35,6 +36,7 @@ const menuItems = [
 ];
 
 export function Profile({ navigate }: ProfileProps) {
+  const { user, signOut } = useAuth();
   return (
     <div className="h-full bg-[#F7FAFF] flex flex-col">
       <Header
@@ -50,8 +52,8 @@ export function Profile({ navigate }: ProfileProps) {
               👤
             </div>
             <div className="flex-1">
-              <h3 className="mb-1">Maria Silva</h3>
-              <p className="text-white/80 text-sm">maria.silva@email.com</p>
+              <h3 className="mb-1">{user?.fullName || 'Usuário'}</h3>
+              <p className="text-white/80 text-sm">{user?.email}</p>
             </div>
           </div>
           
@@ -144,7 +146,13 @@ export function Profile({ navigate }: ProfileProps) {
         </div>
 
         {/* Logout */}
-        <button className="w-full h-[52px] bg-[#FF4D5E]/10 text-[#FF4D5E] rounded-2xl hover:bg-[#FF4D5E]/20 transition-colors flex items-center justify-center gap-2">
+        <button
+          onClick={async () => {
+            await signOut();
+            navigate('login');
+          }}
+          className="w-full h-[52px] bg-[#FF4D5E]/10 text-[#FF4D5E] rounded-2xl hover:bg-[#FF4D5E]/20 transition-colors flex items-center justify-center gap-2"
+        >
           <LogOut className="w-5 h-5" />
           Sair da Conta
         </button>

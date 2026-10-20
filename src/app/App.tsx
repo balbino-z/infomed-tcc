@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Welcome } from './components/screens/Welcome';
 import { Onboarding1 } from './components/screens/Onboarding1';
 import { Onboarding2 } from './components/screens/Onboarding2';
@@ -19,6 +19,9 @@ import { RemindersList } from './components/screens/RemindersList';
 import { CreateReminder } from './components/screens/CreateReminder';
 import { MapFilters } from './components/screens/MapFilters';
 import { Profile } from './components/screens/Profile';
+import { Login } from './components/screens/Login';
+import { Signup } from './components/screens/Signup';
+import { AuthProvider, useAuth } from './features/auth/AuthContext';
 import IPhoneBezel from './imports/IPhoneBezel';
 
 export type Screen = 
@@ -26,6 +29,8 @@ export type Screen =
   | 'onboarding1' 
   | 'onboarding2' 
   | 'onboarding3'
+  | 'login'
+  | 'signup'
   | 'home'
   | 'medications'
   | 'medication-detail'
@@ -55,11 +60,21 @@ export interface AppState {
   reminders?: any[];
 }
 
-export default function App() {
+const PUBLIC_SCREENS: Screen[] = ['welcome', 'onboarding1', 'onboarding2', 'onboarding3', 'login', 'signup'];
+
+function AppContent() {
+  const { user, loading } = useAuth();
   const [appState, setAppState] = useState<AppState>({
     currentScreen: 'welcome',
     reminders: []
   });
+
+  // Sessão já existente (usuário voltou ao app): pula a tela de boas-vindas
+  useEffect(() => {
+    if (!loading && user && appState.currentScreen === 'welcome') {
+      setAppState((prev) => ({ ...prev, currentScreen: 'home' }));
+    }
+  }, [loading, user]);
 
   const navigate = (screen: Screen, data?: Partial<AppState>) => {
     setAppState(prev => ({
@@ -70,6 +85,13 @@ export default function App() {
   };
 
   const renderScreen = () => {
+    if (loading) {
+      return <div className="h-full flex items-center justify-center text-[#64748B]">Carregando...</div>;
+    }
+    // Quem não está logado só acessa as telas públicas
+    if (!user && !PUBLIC_SCREENS.includes(appState.currentScreen)) {
+      return <Login navigate={navigate} />;
+    }
     switch (appState.currentScreen) {
       case 'welcome':
         return <Welcome navigate={navigate} />;
@@ -79,6 +101,10 @@ export default function App() {
         return <Onboarding2 navigate={navigate} />;
       case 'onboarding3':
         return <Onboarding3 navigate={navigate} />;
+      case 'login':
+        return <Login navigate={navigate} />;
+      case 'signup':
+        return <Signup navigate={navigate} />;
       case 'home':
         return <Home navigate={navigate} appState={appState} />;
       case 'medications':
@@ -132,5 +158,13 @@ export default function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }

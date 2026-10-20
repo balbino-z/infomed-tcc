@@ -10,7 +10,7 @@ export function Onboarding2({ navigate }: Onboarding2Props) {
     <div className="h-full bg-[#F7FAFF] flex flex-col px-8">
       <div className="flex items-center justify-end pt-14 pb-8">
         <button
-          onClick={() => navigate('home')}
+          onClick={() => navigate('login')}
           className="text-[#0A73FF]"
         >
           Pular

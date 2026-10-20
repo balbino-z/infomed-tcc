@@ -10,7 +10,7 @@ export function Onboarding3({ navigate }: Onboarding3Props) {
     <div className="h-full bg-[#F7FAFF] flex flex-col px-8">
       <div className="flex items-center justify-end pt-14 pb-8">
         <button
-          onClick={() => navigate('home')}
+          onClick={() => navigate('login')}
           className="text-[#0A73FF]"
         >
           Pular
@@ -38,7 +38,7 @@ export function Onboarding3({ navigate }: Onboarding3Props) {
         </div>
         
         <button
-          onClick={() => navigate('home')}
+          onClick={() => navigate('login')}
           className="w-full h-[52px] bg-[#0A73FF] text-white rounded-2xl hover:bg-[#005BEA] transition-colors"
         >
           Começar

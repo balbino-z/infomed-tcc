@@ -1,6 +1,9 @@
 import { hasSupabase, supabase } from '../lib/supabase';
+import type { AuthRepository } from './AuthRepository';
 import type { MedicationRepository } from './MedicationRepository';
+import { MockAuthRepository } from './mock/MockAuthRepository';
 import { MockMedicationRepository } from './mock/MockMedicationRepository';
+import { SupabaseAuthRepository } from './supabase/SupabaseAuthRepository';
 import { SupabaseMedicationRepository } from './supabase/SupabaseMedicationRepository';
 
 // ÚNICO lugar onde se escolhe a implementação:
@@ -8,3 +11,7 @@ import { SupabaseMedicationRepository } from './supabase/SupabaseMedicationRepos
 export const medicationRepository: MedicationRepository = hasSupabase
   ? new SupabaseMedicationRepository(supabase!)
   : new MockMedicationRepository();
+
+export const authRepository: AuthRepository = hasSupabase
+  ? new SupabaseAuthRepository(supabase!)
+  : new MockAuthRepository();

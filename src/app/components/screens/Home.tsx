@@ -3,6 +3,7 @@ import { Pill, MapPin, Calendar, Clock, ChevronRight } from 'lucide-react';
 import { Screen, AppState } from '../../App';
 import { SearchBar } from '../shared/SearchBar';
 import { BottomNav } from '../shared/BottomNav';
+import { useAuth } from '../../features/auth/AuthContext';
 
 interface HomeProps {
   navigate: (screen: Screen, data?: Partial<AppState>) => void;
@@ -10,6 +11,8 @@ interface HomeProps {
 }
 
 export function Home({ navigate, appState }: HomeProps) {
+  const { user } = useAuth();
+  const firstName = (user?.fullName || user?.email || 'usuário').split(' ')[0];
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
@@ -19,7 +22,7 @@ export function Home({ navigate, appState }: HomeProps) {
         <div className="flex items-center justify-between mb-6">
           <div>
             <p className="text-white/80 text-sm mb-1">Olá,</p>
-            <h2 className="text-white">Maria Silva</h2>
+            <h2 className="text-white">{firstName}</h2>
           </div>
           <button
             onClick={() => navigate('notifications')}

@@ -10,4 +10,4 @@
   - `src/app/components/screens/MedicationList.tsx`
 - **Como testar:** abrir a aba Medicamentos e digitar "met" na busca; deve aparecer apenas a Metformina.
 - **Evidência (print ou diagrama):** (colar print em `docs/evidence/`)
-- **Observações / dificuldades encontradas:** (preencher)
+- **Observações / dificuldades encontradas:** o código exportado do Figma Make trazia a lista fixa dentro da tela; foi extraída para o repositório (ver ADR-002).
