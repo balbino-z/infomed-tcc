@@ -1,29 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Filter } from 'lucide-react';
 import { Screen } from '../../App';
 import { Header } from '../shared/Header';
 import { SearchBar } from '../shared/SearchBar';
 import { BottomNav } from '../shared/BottomNav';
+import type { Medication } from '../../domain/medication';
+import { medicationRepository } from '../../repositories';
 
 interface MedicationListProps {
   navigate: (screen: Screen, data?: any) => void;
 }
 
-const medications = [
-  { id: 1, name: 'Losartana Potássica', dosage: '50mg', type: 'Comprimido', status: 'disponivel', description: 'Anti-hipertensivo' },
-  { id: 2, name: 'Metformina', dosage: '500mg', type: 'Comprimido', status: 'disponivel', description: 'Antidiabético' },
-  { id: 3, name: 'Omeprazol', dosage: '20mg', type: 'Cápsula', status: 'disponivel', description: 'Antiácido' },
-  { id: 4, name: 'Sinvastatina', dosage: '20mg', type: 'Comprimido', status: 'atencao', description: 'Hipolipemiante' },
-  { id: 5, name: 'Paracetamol', dosage: '750mg', type: 'Comprimido', status: 'disponivel', description: 'Analgésico' },
-  { id: 6, name: 'Amoxicilina', dosage: '500mg', type: 'Cápsula', status: 'indisponivel', description: 'Antibiótico' },
-];
-
 export function MedicationList({ navigate }: MedicationListProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredMedications = medications.filter(med =>
-    med.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [medications, setMedications] = useState<Medication[]>([]);
+
+  useEffect(() => {
+    medicationRepository.list(searchQuery).then(setMedications);
+  }, [searchQuery]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -75,7 +70,7 @@ export function MedicationList({ navigate }: MedicationListProps) {
 
       <div className="flex-1 overflow-y-auto px-6 pb-24">
         <div className="space-y-3">
-          {filteredMedications.map((med) => (
+          {medications.map((med) => (
             <button
               key={med.id}
               onClick={() => navigate('medication-detail', { selectedMedication: med })}

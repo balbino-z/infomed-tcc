@@ -3,7 +3,7 @@ import { Screen } from '../../App';
 import { Header } from '../shared/Header';
 
 interface MedicationDetailProps {
-  navigate: (screen: Screen) => void;
+  navigate: (screen: Screen, data?: any) => void;
   medication: any;
 }
 
