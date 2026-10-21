@@ -84,4 +84,16 @@
 **Pendências:** rodar o geocoder na máquina do dev, conferir os 15 pontos no mapa, resolver as 4 divergências de endereço (ver docs/data/fontes-unidades.md), gerar e rodar o SQL.
 **Próximo passo sugerido:** T4 (`HealthUnitRepository` e telas de Postos lendo do banco).
 
-### Sessão 7 — (a preencher) — (nome)
+### Sessão 7 — 20/10/2026 — dono do repositório
+**Tarefa:** T1, T2, T3 concluídas pelo dono; T4 e T5 (postos lendo do banco e mapa) entregues em código
+**Feito:**
+- T1 (login e cadastro no ambiente real), T2 (teste de isolamento RLS) e T3 (`db/05_postos_reais.sql` rodado com as UBS reais) confirmados pelo dono. Corrigido o nome das variáveis de ambiente (`VITE_...`, não `NEXT_PUBLIC_...`) e desativado "Confirm email" no Supabase para a demonstração.
+- T4: `HealthUnit`, `HealthUnitRepository` (Mock e Supabase), telas `PostosList` e `PostoDetail` lendo do banco (aberto/fechado, serviços, telefone, medicamentos da unidade com estoque simulado).
+- T5: mapa com Leaflet e OpenStreetMap carregado sob demanda; marcadores verdes e cinzas; botão "Perto de mim" (ordena por distância, localização só no aparelho); "Como chegar" abre a rota.
+- `unitUtils.ts` (horário em fuso de São Paulo, Haversine) com testes; ADR-005 atualizado; ficha F06.
+**SQL novo para rodar no Supabase:** nenhum.
+**Testes:** tsc ok, 11 testes ok, build ok (mapa em pacote separado de ~156 kB). Nenhuma verificação visual do mapa foi feita fora do ambiente do dono.
+**Pendências:** testar visualmente lista, mapa e detalhe (no PC e no celular); prints em `docs/evidence`; conferir as 4 unidades com endereço divergente; `npm install leaflet@1.9.4 react-leaflet@4.2.1` e `npm i -D @types/leaflet` se ainda não instalados.
+**Próximo passo sugerido:** T6 (react-router), depois T7 (agendamento).
+
+### Sessão 8 — (a preencher) — (nome)

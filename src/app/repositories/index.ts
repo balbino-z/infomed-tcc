@@ -1,8 +1,11 @@
 import { hasSupabase, supabase } from '../lib/supabase';
 import type { AuthRepository } from './AuthRepository';
+import type { HealthUnitRepository } from './HealthUnitRepository';
 import type { MedicationRepository } from './MedicationRepository';
+import { MockHealthUnitRepository } from './mock/MockHealthUnitRepository';
 import { MockAuthRepository } from './mock/MockAuthRepository';
 import { MockMedicationRepository } from './mock/MockMedicationRepository';
+import { SupabaseHealthUnitRepository } from './supabase/SupabaseHealthUnitRepository';
 import { SupabaseAuthRepository } from './supabase/SupabaseAuthRepository';
 import { SupabaseMedicationRepository } from './supabase/SupabaseMedicationRepository';
 
@@ -15,3 +18,7 @@ export const medicationRepository: MedicationRepository = hasSupabase
 export const authRepository: AuthRepository = hasSupabase
   ? new SupabaseAuthRepository(supabase!)
   : new MockAuthRepository();
+
+export const healthUnitRepository: HealthUnitRepository = hasSupabase
+  ? new SupabaseHealthUnitRepository(supabase!)
+  : new MockHealthUnitRepository();

@@ -19,6 +19,7 @@ import { RemindersList } from './components/screens/RemindersList';
 import { CreateReminder } from './components/screens/CreateReminder';
 import { MapFilters } from './components/screens/MapFilters';
 import { Profile } from './components/screens/Profile';
+import type { HealthUnit } from './domain/health-unit';
 import { Login } from './components/screens/Login';
 import { Signup } from './components/screens/Signup';
 import { AuthProvider, useAuth } from './features/auth/AuthContext';
@@ -51,7 +52,7 @@ export type Screen =
 export interface AppState {
   currentScreen: Screen;
   selectedMedication?: any;
-  selectedPosto?: any;
+  selectedPosto?: HealthUnit;
   selectedSpecialty?: string;
   selectedDoctor?: any;
   selectedDate?: string;

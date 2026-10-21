@@ -18,7 +18,7 @@ Projeto Integrador II; Modelagem de Padrões de Projetos (Repository feito; Obse
 
 ## 3. Stack (decidida, não trocar sem ADR)
 
-React 18 · Vite · TypeScript · Tailwind CSS v4 · Supabase (PostgreSQL, Auth, RLS, Edge Functions) · Leaflet + OpenStreetMap (a fazer) · Vitest + Testing Library · GitHub / GitHub Actions (a fazer) · PWA com `vite-plugin-pwa` (feito) · Vercel para hospedagem (ADR-009) · Capacitor/APK só como bônus; iOS fora do escopo.
+React 18 · Vite · TypeScript · Tailwind CSS v4 · Supabase (PostgreSQL, Auth, RLS, Edge Functions) · Leaflet 1.9 + react-leaflet 4.2 (React 18) + OpenStreetMap (feito) · Vitest + Testing Library · GitHub / GitHub Actions (a fazer) · PWA com `vite-plugin-pwa` (feito) · Vercel para hospedagem (ADR-009) · Capacitor/APK só como bônus; iOS fora do escopo.
 
 Origem do front: protótipo gerado no Figma Make e refatorado (ver `docs/decisions/ADR-002`). As telas em `components/screens` vieram de lá; componentes em `components/ui` são do Figma Make (muitos sem uso).
 
@@ -33,11 +33,12 @@ src/app/
                           MapFilters, Profile)
   components/shared/      BottomNav, Header, SearchBar...
   domain/                 entidades: medication.ts, user.ts
-  repositories/           interfaces (MedicationRepository, AuthRepository)
+  repositories/           interfaces (MedicationRepository, AuthRepository, HealthUnitRepository)
     mock/                 implementações em memória
     supabase/             implementações reais
     index.ts              ÚNICO lugar que escolhe Mock ou Supabase (pela existência do .env)
   features/auth/          AuthContext (estado de login) + auth.test.tsx
+  features/units/         unitUtils (aberto/fechado, distância), UnitsMap (Leaflet), useUserLocation, testes
   lib/supabase.ts         cliente Supabase (null sem .env)
 db/                       01_schema.sql, 02_seed.sql, 03_teste_rls.sql, 04_auth.sql, (05_postos_reais.sql gerado por script) — numerados
 data/ e scripts/          dados das UBS reais e scripts que geram o SQL (T3)
@@ -77,13 +78,13 @@ Vitest está fixado na versão 3 (a 4+/5 exige Vite mais novo que o do projeto).
 
 ## 8. Estado atual (conferir em docs/PROGRESSO.md)
 
-Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado (manifesto, service worker, ícones, tela cheia no celular); ADRs 001-009; fichas F01-F05.
+Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; 11 testes; ADRs 001-009; fichas F01-F06.
 Pendente de confirmação no ambiente real: login/cadastro no navegador, `db/04_auth.sql` no Supabase, teste de RLS com 2 contas (prints em `docs/evidence`).
-Pendente de construção: T3 em diante (ver seção 9).
+Pendente de construção: T6 em diante (ver seção 9). Dados ainda fixos nas telas: especialidades, médicos, notificações, histórico, lembretes.
 
 ## 9. Fila de tarefas
 
-T1 confirmar auth real + prints · T2 teste RLS com 2 contas · T3 unidades reais de Santa Bárbara d'Oeste (**em andamento**: dados em `data/unidades-sbo.json`, fontes em `docs/data/fontes-unidades.md`; falta rodar `scripts/geocode-unidades.mjs`, conferir pontos e gerar/rodar `db/05_postos_reais.sql`) · T4 `HealthUnitRepository` + telas de Postos lendo do banco · T5 mapa Leaflet · T6 react-router (a moldura de iPhone já some no celular) · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 react-router (a moldura de iPhone já some no celular) · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 
