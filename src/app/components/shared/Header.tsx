@@ -1,4 +1,5 @@
 import { ChevronLeft, Bell } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router';
 
 interface HeaderProps {
   title: string;
@@ -9,11 +10,17 @@ interface HeaderProps {
 }
 
 export function Header({ title, onBack, showNotification = true, onNotification, notificationCount = 0 }: HeaderProps) {
+  const nav = useNavigate();
+  const location = useLocation();
+  // Se existe uma página anterior dentro do app, volta nela; senão usa o destino indicado pela tela
+  const handleBack = () => (location.key !== 'default' ? nav(-1) : onBack?.());
+
   return (
     <div className="flex items-center justify-between px-6 pt-14 pb-4 bg-white">
       {onBack ? (
         <button 
-          onClick={onBack}
+          onClick={handleBack}
+          aria-label="Voltar"
           className="w-10 h-10 flex items-center justify-center rounded-full bg-[#F7FAFF] hover:bg-[#E8F1FF] transition-colors"
         >
           <ChevronLeft className="w-6 h-6 text-[#1A2B48]" />
@@ -27,6 +34,7 @@ export function Header({ title, onBack, showNotification = true, onNotification,
       {showNotification ? (
         <button 
           onClick={onNotification}
+          aria-label="Notificações"
           className="w-10 h-10 flex items-center justify-center rounded-full bg-[#F7FAFF] hover:bg-[#E8F1FF] transition-colors relative"
         >
           <Bell className="w-5 h-5 text-[#1A2B48]" />

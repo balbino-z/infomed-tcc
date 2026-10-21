@@ -26,7 +26,7 @@ Origem do front: protótipo gerado no Figma Make e refatorado (ver `docs/decisio
 
 ```
 src/app/
-  App.tsx                 navegação por estado (useState) — migração para react-router é a tarefa T6; moldura de iPhone só em telas md+
+  App.tsx                 só monta BrowserRouter, providers e o layout (moldura de iPhone só em telas md+)
   components/screens/     20 telas (Welcome, Onboarding1-3, Login, Signup, Home, MedicationList,
                           MedicationDetail, PostosList, PostoDetail, Schedule*, AppointmentConfirmed,
                           CancelAppointment, Notifications, History, Reminders, CreateReminder,
@@ -38,6 +38,7 @@ src/app/
     supabase/             implementações reais
     index.ts              ÚNICO lugar que escolhe Mock ou Supabase (pela existência do .env)
   features/auth/          AuthContext (estado de login) + auth.test.tsx
+  features/navigation/    routes.ts (URL de cada tela), AppRoutes (rotas + proteção), useAppNavigate (adaptador navigate('tela', dados)), AppData (dados entre telas, em memória)
   features/units/         unitUtils (aberto/fechado, distância), UnitsMap (Leaflet), useUserLocation, testes
   lib/supabase.ts         cliente Supabase (null sem .env)
 db/                       01_schema.sql, 02_seed.sql, 03_teste_rls.sql, 04_auth.sql, (05_postos_reais.sql gerado por script) — numerados
@@ -60,17 +61,20 @@ Objetos: view `medications_with_status` (security_invoker); função `booked_slo
 4. Nunca usar, pedir ou versionar a chave `service_role`/secret. Só `VITE_SUPABASE_URL` e a chave `publishable` no front. O `.env` nunca vai para o Git (`.env.example` é o modelo).
 5. Interface em português, mantendo o visual do Figma (cores: azul `#0A73FF`, fundo `#F7FAFF`, texto `#1A2B48`, alerta `#FF4D5E`, sucesso `#27C183`).
 6. Não adicionar bibliotecas sem justificar; não reintroduzir MUI, emotion, react-slick, react-dnd, motion, date-fns.
-7. Antes de declarar pronto: `npx tsc --noEmit`, `npm test`, `npm run build`.
+7. Navegação: telas continuam usando `navigate('tela', dados)`; **tela nova = nova entrada em `routes.ts` (SCREEN_PATH) + `<Route>` em `AppRoutes.tsx`**. Itens com detalhe usam `/:id` e carregam pelo repositório. `react-router` fica na série 7 (a 8 exige React 19).
+7b. Antes de declarar pronto: `npx tsc --noEmit`, `npm test`, `npm run build`.
 8. Toda decisão técnica nova → ADR em `docs/decisions`; toda funcionalidade concluída → ficha em `docs/features`; evidências em `docs/evidence`.
 9. Ao final de cada sessão, gerar um resumo para colar em `docs/PROGRESSO.md`.
 10. Não inventar arquivos nem afirmar que algo existe sem verificar. Em dúvida, peça ao usuário para mostrar o arquivo ou rodar `git log --oneline`.
 
 ## 7. Comandos
 
+Os testes (`vitest.config.ts`) forçam os repositórios Mock, mesmo com `.env`. Telas que usam `Header` precisam ser renderizadas dentro de `<MemoryRouter>` nos testes.
+
 ```
 npm install          # instalar dependências
 npm run dev          # rodar (http://localhost:5173)
-npm test             # testes (Vitest, 4 testes de auth)
+npm test             # testes (Vitest: auth, postos, navegação)
 npx tsc --noEmit     # checar tipos
 npm run build        # build de produção
 ```
@@ -78,20 +82,20 @@ Vitest está fixado na versão 3 (a 4+/5 exige Vite mais novo que o do projeto).
 
 ## 8. Estado atual (conferir em docs/PROGRESSO.md)
 
-Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; 11 testes; ADRs 001-009; fichas F01-F06.
+Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas (react-router 7; links diretos, voltar e F5 funcionam); 19 testes; ADRs 001-010; fichas F01-F07.
 Pendente de confirmação no ambiente real: login/cadastro no navegador, `db/04_auth.sql` no Supabase, teste de RLS com 2 contas (prints em `docs/evidence`).
-Pendente de construção: T6 em diante (ver seção 9). Dados ainda fixos nas telas: especialidades, médicos, notificações, histórico, lembretes.
+Pendente de construção: T7 em diante (ver seção 9). Dados ainda fixos nas telas: especialidades, médicos, notificações, histórico, lembretes.
 
 ## 9. Fila de tarefas
 
-T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 react-router (a moldura de iPhone já some no celular) · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 
 - Código do Figma Make usava `pacote@versão` em dependências e imports; já corrigido. Se aparecer de novo, rodar `node fix-imports.mjs`.
 - Projeto deve ficar fora do OneDrive (`C:\projetos\InfoMed`).
 - O Vite só lê o `.env` ao iniciar; reiniciar `npm run dev` após mudar.
-- `package.json`, `App.tsx` e `repositories/index.ts` são os arquivos que mais geram conflito entre os dois devs.
+- `package.json`, `AppRoutes.tsx`, `routes.ts` e `repositories/index.ts` são os arquivos que mais geram conflito entre os dois devs.
 - Dados fixos que ainda existem nas telas (a migrar para repositórios): postos, médicos, especialidades, notificações, histórico, lembretes, textos como "Dezembro 2024".
 
 ## 11. Perfil do usuário e estilo de resposta

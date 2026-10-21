@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router';
 import { PostosList } from '../../components/screens/PostosList';
 import { distanceKm, formatDistance, formatTime, hoursLabel, isOpenNow } from './unitUtils';
 import { MockHealthUnitRepository } from '../../repositories/mock/MockHealthUnitRepository';
@@ -57,7 +58,11 @@ describe('PostosList', () => {
   beforeEach(() => cleanup());
 
   it('mostra os postos e filtra pela busca', async () => {
-    render(<PostosList navigate={() => {}} />);
+    render(
+      <MemoryRouter>
+        <PostosList navigate={() => {}} />
+      </MemoryRouter>,
+    );
     expect(await screen.findByText('UBS Exemplo Centro')).toBeTruthy();
     expect(screen.getByText('UBS Exemplo Norte')).toBeTruthy();
 

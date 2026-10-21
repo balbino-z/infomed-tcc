@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router';
 import { AuthProvider } from './AuthContext';
 import { Login } from '../../components/screens/Login';
 import { Signup } from '../../components/screens/Signup';
@@ -42,9 +43,11 @@ describe('Signup (LGPD)', () => {
   it('bloqueia o cadastro sem aceitar os termos', async () => {
     const navigate = vi.fn();
     const { container } = render(
-      <AuthProvider>
-        <Signup navigate={navigate} />
-      </AuthProvider>,
+      <MemoryRouter>
+        <AuthProvider>
+          <Signup navigate={navigate} />
+        </AuthProvider>
+      </MemoryRouter>,
     );
     const [nome, email, senha] = Array.from(container.querySelectorAll('input:not([type=checkbox])'));
     await userEvent.type(nome, 'Maria da Silva');
@@ -58,9 +61,11 @@ describe('Signup (LGPD)', () => {
   it('cadastra quando os termos são aceitos', async () => {
     const navigate = vi.fn();
     const { container } = render(
-      <AuthProvider>
-        <Signup navigate={navigate} />
-      </AuthProvider>,
+      <MemoryRouter>
+        <AuthProvider>
+          <Signup navigate={navigate} />
+        </AuthProvider>
+      </MemoryRouter>,
     );
     const [nome, email, senha] = Array.from(container.querySelectorAll('input:not([type=checkbox])'));
     await userEvent.type(nome, 'Maria da Silva');

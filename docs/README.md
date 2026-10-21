@@ -7,6 +7,7 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | `decisions/` | ADRs: uma decisão técnica por arquivo (contexto, decisão, alternativas, consequências) |
 | `features/` | Uma ficha por funcionalidade concluída (modelo em `features/_modelo.md`) |
 | `diagrams/` | Diagramas em Mermaid (arquitetura, modelo ER, classes, fluxos) |
+| `data/` | Fontes e decisões sobre os dados reais das unidades de saúde |
 | `security/` | Controles de segurança e casos de teste (RLS, LGPD) |
 | `evidence/` | Prints de telas, pipeline verde, políticas de RLS, dashboard, pesquisa de usabilidade |
 
@@ -23,6 +24,7 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | 007 | Variáveis de ambiente e gestão de chaves | Aceita |
 | 008 | Autenticação com Supabase Auth e consentimento LGPD | Aceita |
 | 009 | PWA instalável e hospedagem na Vercel | Aceita |
+| 010 | Navegação por rotas com react-router | Aceita (implementada) |
 
 ## Índice de features
 
@@ -34,13 +36,14 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | F04 | Login, cadastro e consentimento LGPD | Concluída (falta registrar evidências) |
 | F05 | PWA instalável e publicação na nuvem | Concluída (falta registrar evidências) |
 | F06 | Postos reais com lista, detalhe e mapa | Concluída (falta registrar evidências) |
+| F07 | Navegação por rotas (voltar e links diretos) | Concluída (falta registrar evidências) |
 
 ## Mapa disciplina → onde está documentado
 
 | Disciplina | Onde |
 |---|---|
-| Modelagem de Padrões de Projetos | ADR-003, F01, F03, F06 |
-| Programação Multi Plataforma | ADR-001, ADR-005, ADR-009, F05, F06 |
+| Modelagem de Padrões de Projetos | ADR-003, ADR-010, F01, F03, F06 |
+| Programação Multi Plataforma | ADR-001, ADR-005, ADR-009, ADR-010, F05, F06, F07 |
 | Computação em Nuvem | ADR-004, ADR-009, F02, F05 |
 | Segurança e Defesa Cibernética | ADR-004, ADR-007, ADR-008, `security/testes-rls.md`, F02, F04 |
 | Integração e Entrega Contínua | ADR-006 (a implementar), ADR-009 (deploy automático) |

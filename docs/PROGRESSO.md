@@ -96,4 +96,17 @@
 **Pendências:** testar visualmente lista, mapa e detalhe (no PC e no celular); prints em `docs/evidence`; conferir as 4 unidades com endereço divergente; `npm install leaflet@1.9.4 react-leaflet@4.2.1` e `npm i -D @types/leaflet` se ainda não instalados.
 **Próximo passo sugerido:** T6 (react-router), depois T7 (agendamento).
 
-### Sessão 8 — (a preencher) — (nome)
+### Sessão 8 — 20/10/2026 — dono do repositório
+**Tarefa:** T6 (navegação por rotas) e correção dos testes
+**Feito:**
+- Testes corrigidos: `vitest.config.ts` agora força os repositórios Mock mesmo com `.env` presente (antes, 3 testes falhavam na máquina do dev porque usavam o Supabase real).
+- T4/T5 validados pelo dono no PC e no celular (postos reais, mapa, "Perto de mim").
+- T6: react-router 7 com `BrowserRouter`; URLs em português (`/postos`, `/postos/:id`, `/medicamentos/:id`, `/agendar`, `/lembretes/novo`...); adaptador `useAppNavigate` mantém o contrato `navigate('tela', dados)` das telas; detalhes carregam por id da URL (link direto e F5 funcionam); proteção de rotas (sem login → `/entrar`; logado em `/` ou `/entrar` → `/inicio`); `Header` volta no histórico; `aria-label` em Voltar e Notificações; `vercel.json` com reescrita para SPA.
+- ADR-010 e ficha F07; README e CONTEXTO atualizados.
+**SQL novo para rodar no Supabase:** nenhum.
+**Testes:** tsc ok, 19 testes ok, build ok (PWA com 18 arquivos em cache).
+**Pendências:** testar no PC e no celular (botão voltar, link direto, F5, logout); prints em `docs/evidence`; os dados dos fluxos (especialidade, médico, data) ainda ficam só em memória até o agendamento (T7).
+**Atenção para a dupla:** `App.tsx` mudou muito (agora só monta o router e o layout). Quem estiver com branch aberta deve fazer `git pull` antes de mexer em rotas.
+**Próximo passo sugerido:** T7 (agendamento ponta a ponta, padrão Factory, função `booked_slots`).
+
+### Sessão 9 — (a preencher) — (nome)
