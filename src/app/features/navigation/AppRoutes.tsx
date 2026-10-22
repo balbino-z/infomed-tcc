@@ -110,15 +110,16 @@ export function AppRoutes() {
       <Route path="/postos/:id" element={priv(<PostoDetailRoute />)} />
 
       <Route path="/agendar" element={priv(<ScheduleSpecialty navigate={navigate} />)} />
-      <Route path="/agendar/medico" element={priv(<ScheduleDoctor navigate={navigate} specialty={data.selectedSpecialty} />)} />
-      <Route path="/agendar/horario" element={priv(<ScheduleDateTime navigate={navigate} doctor={data.selectedDoctor} />)} />
-      <Route path="/agendar/confirmado" element={priv(<AppointmentConfirmed navigate={navigate} appointment={appState} />)} />
-      <Route path="/consultas/cancelar" element={priv(<CancelAppointment navigate={navigate} appointment={data.selectedAppointment} />)} />
+      {/* Passos do agendamento: se a pessoa recarregar no meio do fluxo, volta ao início dele */}
+      <Route path="/agendar/medico" element={priv(data.selectedSpecialty ? <ScheduleDoctor navigate={navigate} specialty={data.selectedSpecialty} /> : <Navigate to="/agendar" replace />)} />
+      <Route path="/agendar/horario" element={priv(data.selectedDoctor ? <ScheduleDateTime navigate={navigate} doctor={data.selectedDoctor} kind={data.selectedKind} /> : <Navigate to="/agendar" replace />)} />
+      <Route path="/agendar/confirmado" element={priv(data.lastBooked ? <AppointmentConfirmed navigate={navigate} appointment={data.lastBooked} /> : <Navigate to="/historico" replace />)} />
+      <Route path="/consultas/cancelar" element={priv(data.selectedAppointment ? <CancelAppointment navigate={navigate} appointment={data.selectedAppointment} /> : <Navigate to="/historico" replace />)} />
 
       <Route path="/notificacoes" element={priv(<Notifications navigate={navigate} />)} />
       <Route path="/historico" element={priv(<History navigate={navigate} />)} />
-      <Route path="/lembretes" element={priv(<RemindersList navigate={navigate} reminders={data.reminders || []} />)} />
-      <Route path="/lembretes/novo" element={priv(<CreateReminder navigate={navigate} medication={data.selectedMedication} appState={appState} />)} />
+      <Route path="/lembretes" element={priv(<RemindersList navigate={navigate} />)} />
+      <Route path="/lembretes/novo" element={priv(<CreateReminder navigate={navigate} medication={data.selectedMedication} />)} />
       <Route path="/perfil" element={priv(<Profile navigate={navigate} />)} />
 
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -41,3 +41,29 @@ Comprovar que um usuário autenticado acessa somente os próprios dados e que da
 ## Observação sobre os testes já realizados
 
 Antes da publicação, o esquema foi validado em um PostgreSQL local com um modelo simulado do `auth` do Supabase, e os casos T1 a T8 tiveram o resultado esperado. A validação definitiva deve ser repetida no projeto real do Supabase, com as contas de teste.
+
+## Testes do agendamento e dos lembretes (T9 a T27)
+
+Executados no PostgreSQL local com o esquema `db/01` a `db/07` e dois usuários simulados (Maria e João). **Repetir no Supabase real** e registrar a coluna "Resultado no Supabase".
+
+| # | Cenário | Resultado esperado | Resultado local | Resultado no Supabase |
+|---|---|---|---|---|
+| T9 | Maria agenda um horário válido | Aceito | Aceito | (preencher) |
+| T10 | João tenta o mesmo médico e horário | Erro de duplicidade | Erro de duplicidade | (preencher) |
+| T11 | Horário fora da grade (10:15) | Erro "30 em 30 minutos" | Erro | (preencher) |
+| T12 | Antes da abertura da unidade (06:30) | Erro "fora do atendimento" | Erro | (preencher) |
+| T13 | Último horário (16:00) e depois do expediente (16:30) | 16:00 aceito, 16:30 recusado | Como esperado | (preencher) |
+| T14 | Horário no passado | Erro | Erro | (preencher) |
+| T15 | Fim de semana | Erro "segunda a sexta" | Erro | (preencher) |
+| T16 | João cria consulta em nome da Maria | Erro de RLS | Erro de RLS | (preencher) |
+| T17 | João marca a própria consulta como "concluída" | Erro "Mudança de status não permitida" | Erro | (preencher) |
+| T18 | João altera o horário da própria consulta | Erro "Só é permitido cancelar" | Erro | (preencher) |
+| T19 | João cancela a própria consulta | Aceito; view mostra só a dele | Aceito | (preencher) |
+| T20 | Notificações do João | "Consulta agendada" e "Consulta cancelada" criadas pelo servidor | Como esperado | (preencher) |
+| T21 | `booked_slots` | Devolve os instantes ocupados, sem identificar quem marcou | Como esperado | (preencher) |
+| T22 | Maria consulta `my_appointments` | Vê só as dela | Como esperado | (preencher) |
+| T23 | Lembrete válido | Aceito | Aceito | (preencher) |
+| T24 | Horário inválido (25:99) | Erro de validação | Erro | (preencher) |
+| T25 | Sem nome e sem medicamento | Erro de validação | Erro | (preencher) |
+| T26 | Dia da semana inválido (9) | Erro de validação | Erro | (preencher) |
+| T27 | Sem horários ou sem dias | Erro de validação | Erro | (preencher) |

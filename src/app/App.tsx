@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router';
 import { AuthProvider } from './features/auth/AuthContext';
 import { AppDataProvider } from './features/navigation/AppData';
 import { AppRoutes } from './features/navigation/AppRoutes';
+import { ReminderAlerts } from './features/reminders/ReminderAlerts';
 import IPhoneBezel from './imports/IPhoneBezel';
 
 // Os tipos agora moram em features/navigation/types.ts (as telas continuam importando daqui)
@@ -21,6 +22,7 @@ export default function App() {
               <div className="absolute inset-0 overflow-hidden md:rounded-[55px]">
                 <div className="h-full w-full bg-white">
                   <AppRoutes />
+                  <ReminderAlerts />
                 </div>
               </div>
             </div>

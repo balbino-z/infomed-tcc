@@ -109,4 +109,16 @@
 **Atenção para a dupla:** `App.tsx` mudou muito (agora só monta o router e o layout). Quem estiver com branch aberta deve fazer `git pull` antes de mexer em rotas.
 **Próximo passo sugerido:** T7 (agendamento ponta a ponta, padrão Factory, função `booked_slots`).
 
-### Sessão 9 — (a preencher) — (nome)
+### Sessão 9 — 20/10/2026 — dono do repositório
+**Tarefa:** T7 (agendamento) e T8 (lembretes e notificações), entregues juntas
+**Feito:**
+- T6 validada pelo dono (voltar, link direto, F5 e login/logout funcionando).
+- T7: `db/06_agendamento.sql` (gatilho de regras, índices únicos, notificações automáticas, view `my_appointments`); domínio `appointment.ts`; `AppointmentRepository` (Mock e Supabase); padrão **Factory** (`AppointmentFactory`, com regras por tipo); horários de 30 em 30 min com ocupados bloqueados; telas Especialidade, Médico, Data e Hora, Confirmação, Histórico e Cancelar reescritas; cartão "Próxima consulta" real na Home.
+- T8: `db/07_lembretes.sql` (nome livre e validações); padrão **Observer** (`EventBus`); `ReminderRepository` e `NotificationRepository` (Mock e Supabase); `ReminderScheduler` + alerta "Hora do remédio"; telas Lembretes, Novo Lembrete e Notificações reescritas; contador no sino (Header e Home); lembretes de hoje na Home.
+- ADR-011, ADR-012, fichas F08 e F09, `diagrams/padroes-de-projeto.md`, casos T9 a T27 em `security/testes-rls.md`.
+**SQL novo para rodar no Supabase:** `db/06_agendamento.sql` e depois `db/07_lembretes.sql` (podem ser repetidos sem problema).
+**Testes:** tsc ok, 37 testes ok (com e sem `.env`), build ok; as regras do banco foram validadas em PostgreSQL local (22 casos). Nada foi visto no navegador fora do ambiente do dono.
+**Pendências:** rodar os dois SQL; testar o fluxo no PC e no celular com duas contas; prints e preencher a coluna "Resultado no Supabase" em `security/testes-rls.md`; avisos de lembrete só com o app aberto (limitação).
+**Próximo passo sugerido:** T9 (filtros com padrão Strategy), T10 (CI GitHub Actions), T11 (IA), T12 (BI), T13 (pesquisa SUS). Sugestão de divisão: dev A = T9 + T10; dev B = T11 + T12; ambos = T13.
+
+### Sessão 10 — (a preencher) — (nome)

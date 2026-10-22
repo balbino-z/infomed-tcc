@@ -33,15 +33,18 @@ src/app/
                           MapFilters, Profile)
   components/shared/      BottomNav, Header, SearchBar...
   domain/                 entidades: medication.ts, user.ts
-  repositories/           interfaces (MedicationRepository, AuthRepository, HealthUnitRepository)
+  repositories/           interfaces (Medication, Auth, HealthUnit, Appointment, Notification, Reminder)
     mock/                 implementações em memória
     supabase/             implementações reais
     index.ts              ÚNICO lugar que escolhe Mock ou Supabase (pela existência do .env)
   features/auth/          AuthContext (estado de login) + auth.test.tsx
   features/navigation/    routes.ts (URL de cada tela), AppRoutes (rotas + proteção), useAppNavigate (adaptador navigate('tela', dados)), AppData (dados entre telas, em memória)
+  features/scheduling/    AppointmentFactory (padrão Factory), slots, dateUtils (fuso de São Paulo)
+  features/notifications/ EventBus (padrão Observer), useUnreadCount
+  features/reminders/     ReminderScheduler (hora do remédio, só com o app aberto), ReminderAlerts
   features/units/         unitUtils (aberto/fechado, distância), UnitsMap (Leaflet), useUserLocation, testes
   lib/supabase.ts         cliente Supabase (null sem .env)
-db/                       01_schema.sql, 02_seed.sql, 03_teste_rls.sql, 04_auth.sql, (05_postos_reais.sql gerado por script) — numerados
+db/                       01_schema, 02_seed, 03_teste_rls, 04_auth, (05_postos_reais gerado por script), 06_agendamento, 07_lembretes — numerados
 data/ e scripts/          dados das UBS reais e scripts que geram o SQL (T3)
 docs/                     decisions (ADR-001..008), features (F01..F04), diagrams, security, evidence, PROGRESSO.md
 ```
@@ -57,7 +60,7 @@ Objetos: view `medications_with_status` (security_invoker); função `booked_slo
 
 1. Telas **nunca** acessam o Supabase direto; usam interfaces de `repositories/`. Para um recurso novo: entidade em `domain/`, interface, implementação Mock, implementação Supabase, registro em `repositories/index.ts`.
 2. Sem `any` novo; manter `npx tsc --noEmit` limpo.
-3. Mudança no banco = **novo arquivo** em `db/` com número seguinte (05, 06...). Nunca editar `01_schema.sql`. Incluir `grant` e `policy`. Avisar o parceiro: o Supabase é único e só um roda o script.
+3. Regras de negócio críticas ficam **também no banco** (gatilhos, índices únicos, RLS); o app só as espelha para dar mensagem clara. Mudança no banco = **novo arquivo** em `db/` com número seguinte (05, 06...). Nunca editar `01_schema.sql`. Incluir `grant` e `policy`. Avisar o parceiro: o Supabase é único e só um roda o script.
 4. Nunca usar, pedir ou versionar a chave `service_role`/secret. Só `VITE_SUPABASE_URL` e a chave `publishable` no front. O `.env` nunca vai para o Git (`.env.example` é o modelo).
 5. Interface em português, mantendo o visual do Figma (cores: azul `#0A73FF`, fundo `#F7FAFF`, texto `#1A2B48`, alerta `#FF4D5E`, sucesso `#27C183`).
 6. Não adicionar bibliotecas sem justificar; não reintroduzir MUI, emotion, react-slick, react-dnd, motion, date-fns.
@@ -82,13 +85,13 @@ Vitest está fixado na versão 3 (a 4+/5 exige Vite mais novo que o do projeto).
 
 ## 8. Estado atual (conferir em docs/PROGRESSO.md)
 
-Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas (react-router 7; links diretos, voltar e F5 funcionam); 19 testes; ADRs 001-010; fichas F01-F07.
+Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas; agendamento completo (regras também no banco), histórico e cancelamento; lembretes e notificações; 37 testes; ADRs 001-012; fichas F01-F09.
 Pendente de confirmação no ambiente real: login/cadastro no navegador, `db/04_auth.sql` no Supabase, teste de RLS com 2 contas (prints em `docs/evidence`).
-Pendente de construção: T7 em diante (ver seção 9). Dados ainda fixos nas telas: especialidades, médicos, notificações, histórico, lembretes.
+Pendente de construção: T9 em diante (ver seção 9). Pendente de confirmação no ambiente real: rodar `db/06` e `db/07` no Supabase. Dados ainda fixos: filtros do mapa (`MapFilters`).
 
 ## 9. Fila de tarefas
 
-T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento ponta a ponta (padrão Factory, `booked_slots`) · T8 lembretes (Observer) e notificações · T9 filtros (Strategy) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento (Factory) e T8 lembretes e notificações (Observer) **feitas** · T9 filtros dos postos (Strategy, a fazer) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 

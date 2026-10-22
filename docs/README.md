@@ -25,6 +25,8 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | 008 | Autenticação com Supabase Auth e consentimento LGPD | Aceita |
 | 009 | PWA instalável e hospedagem na Vercel | Aceita |
 | 010 | Navegação por rotas com react-router | Aceita (implementada) |
+| 011 | Agendamento: regras no banco e padrão Factory | Aceita (implementada) |
+| 012 | Padrão Observer para notificações e lembretes | Aceita (implementada) |
 
 ## Índice de features
 
@@ -37,14 +39,16 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | F05 | PWA instalável e publicação na nuvem | Concluída (falta registrar evidências) |
 | F06 | Postos reais com lista, detalhe e mapa | Concluída (falta registrar evidências) |
 | F07 | Navegação por rotas (voltar e links diretos) | Concluída (falta registrar evidências) |
+| F08 | Agendamento, histórico e cancelamento | Concluída (falta registrar evidências) |
+| F09 | Lembretes de medicação e notificações | Concluída (falta registrar evidências) |
 
 ## Mapa disciplina → onde está documentado
 
 | Disciplina | Onde |
 |---|---|
-| Modelagem de Padrões de Projetos | ADR-003, ADR-010, F01, F03, F06 |
+| Modelagem de Padrões de Projetos | ADR-003, ADR-011 (Factory), ADR-012 (Observer), F01, F03, F06, F08, F09, `diagrams/padroes-de-projeto.md` |
 | Programação Multi Plataforma | ADR-001, ADR-005, ADR-009, ADR-010, F05, F06, F07 |
 | Computação em Nuvem | ADR-004, ADR-009, F02, F05 |
-| Segurança e Defesa Cibernética | ADR-004, ADR-007, ADR-008, `security/testes-rls.md`, F02, F04 |
+| Segurança e Defesa Cibernética | ADR-004, ADR-007, ADR-008, ADR-011, `security/testes-rls.md`, F02, F04, F08 |
 | Integração e Entrega Contínua | ADR-006 (a implementar), ADR-009 (deploy automático) |
 | Projeto Integrador II | ADR-002 e todo o conjunto |

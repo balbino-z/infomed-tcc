@@ -1,3 +1,4 @@
+import type { Appointment, AppointmentKind, Doctor, Specialty } from '../../domain/appointment';
 import type { HealthUnit } from '../../domain/health-unit';
 
 export type Screen =
@@ -29,10 +30,10 @@ export interface AppState {
   currentScreen: Screen;
   selectedMedication?: any;
   selectedPosto?: HealthUnit;
-  selectedSpecialty?: string;
-  selectedDoctor?: any;
-  selectedDate?: string;
-  selectedTime?: string;
-  selectedAppointment?: any;
-  reminders?: any[];
+  // fluxo de agendamento
+  selectedKind?: AppointmentKind;
+  selectedSpecialty?: Specialty;
+  selectedDoctor?: Doctor;
+  selectedAppointment?: Appointment; // consulta escolhida para cancelar
+  lastBooked?: Appointment;          // consulta recém-agendada
 }

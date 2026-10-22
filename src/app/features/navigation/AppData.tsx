@@ -11,7 +11,7 @@ interface AppDataContextValue {
 const AppDataContext = createContext<AppDataContextValue | null>(null);
 
 export function AppDataProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<AppData>({ reminders: [] });
+  const [data, setData] = useState<AppData>({});
   const update = (partial: Partial<AppData>) => setData((prev) => ({ ...prev, ...partial }));
   return <AppDataContext.Provider value={{ data, update }}>{children}</AppDataContext.Provider>;
 }
