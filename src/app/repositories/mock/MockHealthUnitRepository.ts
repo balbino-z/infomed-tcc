@@ -21,6 +21,11 @@ export class MockHealthUnitRepository implements HealthUnitRepository {
   async getById(id: string) {
     return UNITS.find((u) => u.id === id) ?? null;
   }
+  async unitIdsWithMedication(medicationId: string) {
+    if (medicationId === 'm1') return ['u1', 'u2'];
+    if (medicationId === 'm3') return [];
+    return UNITS.map((u) => u.id);
+  }
   async listMedications(unitId: string) {
     return unitId === 'u3' ? [] : MEDS;
   }

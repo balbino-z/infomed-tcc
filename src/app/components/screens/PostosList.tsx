@@ -7,6 +7,8 @@ import { BottomNav } from '../shared/BottomNav';
 import type { HealthUnit } from '../../domain/health-unit';
 import { healthUnitRepository } from '../../repositories';
 import { distanceKm, formatDistance, hoursLabel, isOpenNow } from '../../features/units/unitUtils';
+import { DEFAULT_FILTERS, type UnitFilters } from '../../features/units/filters/types';
+import { countActiveFilters, filterUnits } from '../../features/units/filters/applyFilters';
 import { useUserLocation } from '../../features/units/useUserLocation';
 
 // O Leaflet só é baixado quando a pessoa abre o mapa
@@ -14,15 +16,33 @@ const UnitsMap = lazy(() => import('../../features/units/UnitsMap'));
 
 interface PostosListProps {
   navigate: (screen: Screen, data?: any) => void;
+  filters?: UnitFilters;
 }
 
-export function PostosList({ navigate }: PostosListProps) {
+export function PostosList({ navigate, filters = DEFAULT_FILTERS }: PostosListProps) {
   const [units, setUnits] = useState<HealthUnit[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const { location, error: locationError, loading: locating, request } = useUserLocation();
+  const [nearby, setNearby] = useState(false); // botão "Perto de mim"
+  const [medUnitIds, setMedUnitIds] = useState<Set<string> | null>(null);
+  const activeFilters = countActiveFilters(filters);
+
+  // Quem escolheu filtrar/ordenar por distância precisa da localização
+  useEffect(() => {
+    if ((filters.maxDistanceKm !== null || filters.sort === 'distance') && !location) request();
+  }, [filters.maxDistanceKm, filters.sort]);
+
+  // Filtro de medicamento: busca as unidades que têm o item disponível
+  useEffect(() => {
+    if (!filters.medicationId) {
+      setMedUnitIds(null);
+      return;
+    }
+    healthUnitRepository.unitIdsWithMedication(filters.medicationId).then((ids) => setMedUnitIds(new Set(ids))).catch(() => setMedUnitIds(null));
+  }, [filters.medicationId]);
 
   useEffect(() => {
     healthUnitRepository
@@ -34,12 +54,12 @@ export function PostosList({ navigate }: PostosListProps) {
 
   const visible = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    const filtered = units.filter((u) => !q || u.name.toLowerCase().includes(q) || u.address.toLowerCase().includes(q));
-    if (!location) return filtered.map((u) => ({ unit: u, km: null as number | null }));
-    return filtered
-      .map((u) => ({ unit: u, km: distanceKm(location, u) as number | null }))
-      .sort((a, b) => (a.km ?? 0) - (b.km ?? 0));
-  }, [units, searchQuery, location]);
+    const effective: UnitFilters = { ...filters, sort: nearby || filters.sort === 'distance' ? 'distance' : 'name' };
+    // PADRÃO STRATEGY: filtros e ordenação são estratégias combinadas por filterUnits
+    const filtered = filterUnits(units, effective, { now: new Date(), userLocation: location, unitIdsWithMedication: medUnitIds });
+    const searched = filtered.filter((u) => !q || u.name.toLowerCase().includes(q) || u.address.toLowerCase().includes(q));
+    return searched.map((u) => ({ unit: u, km: location ? distanceKm(location, u) : (null as number | null) }));
+  }, [units, searchQuery, location, filters, nearby, medUnitIds]);
 
   const openDetail = (unit: HealthUnit) => navigate('posto-detail', { selectedPosto: unit });
 
@@ -56,16 +76,16 @@ export function PostosList({ navigate }: PostosListProps) {
             className="flex items-center gap-2 px-4 h-10 bg-white rounded-xl border border-[#E8F1FF] text-[#0A73FF]"
           >
             <SlidersHorizontal className="w-5 h-5" />
-            <span>Filtros</span>
+            <span>Filtros{activeFilters > 0 ? ` (${activeFilters})` : ''}</span>
           </button>
 
           <button
-            onClick={request}
+            onClick={() => { setNearby(true); request(); }}
             disabled={locating}
             className="flex items-center gap-2 px-4 h-10 bg-white rounded-xl border border-[#E8F1FF] text-[#0A73FF] disabled:opacity-60"
           >
             <LocateFixed className="w-5 h-5" />
-            <span>{locating ? 'Localizando...' : location ? 'Perto de mim ✓' : 'Perto de mim'}</span>
+            <span>{locating ? 'Localizando...' : location && nearby ? 'Perto de mim ✓' : 'Perto de mim'}</span>
           </button>
 
           <button
@@ -77,6 +97,12 @@ export function PostosList({ navigate }: PostosListProps) {
           </button>
         </div>
 
+        {activeFilters > 0 && (
+          <p className="text-sm text-[#64748B]">
+            {visible.length} {visible.length === 1 ? 'posto' : 'postos'} com os filtros escolhidos.{' '}
+            <button onClick={() => navigate('postos', { unitFilters: DEFAULT_FILTERS })} className="text-[#0A73FF]">Limpar filtros</button>
+          </p>
+        )}
         {locationError && <p role="alert" className="text-[#FF4D5E] text-sm">{locationError}</p>}
       </div>
 

@@ -67,3 +67,7 @@ Executados no PostgreSQL local com o esquema `db/01` a `db/07` e dois usuários 
 | T25 | Sem nome e sem medicamento | Erro de validação | Erro | (preencher) |
 | T26 | Dia da semana inválido (9) | Erro de validação | Erro | (preencher) |
 | T27 | Sem horários ou sem dias | Erro de validação | Erro | (preencher) |
+
+## Execução automática no CI
+
+Os casos acima (isolamento entre usuários, regras do agendamento, validações dos lembretes e bloqueio de acesso anônimo) foram convertidos em testes automáticos em `db/ci/tests.sql`. Eles rodam a cada `push` e `pull request` no job **Database** do GitHub Actions (ADR-006), sobre um PostgreSQL com substitutos do Supabase. Os testes foram validados por **mutação**: remover o gatilho de regras do agendamento ou desligar o RLS dos lembretes faz o teste falhar. A execução no Supabase real continua necessária como evidência final (coluna "Resultado no Supabase").

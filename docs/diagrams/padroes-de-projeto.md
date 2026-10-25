@@ -76,6 +76,35 @@ flowchart LR
   B -- não --> A
 ```
 
-## Strategy (planejado, T9)
+## Strategy (ADR-013)
 
-Filtros dos postos (por distância, serviço, aberto agora e estoque) como estratégias intercambiáveis.
+```mermaid
+classDiagram
+  class UnitFilterStrategy {
+    <<interface>>
+    +matches(unit, ctx) boolean
+  }
+  class UnitSortStrategy {
+    <<interface>>
+    +compare(a, b, ctx) number
+  }
+  class OpenNowFilter
+  class ServicesFilter
+  class MaxDistanceFilter
+  class MedicationAvailableFilter
+  class NameSort
+  class DistanceSort
+  class filterUnits {
+    +filterUnits(units, filters, ctx)
+  }
+  class PostosList
+  UnitFilterStrategy <|.. OpenNowFilter
+  UnitFilterStrategy <|.. ServicesFilter
+  UnitFilterStrategy <|.. MaxDistanceFilter
+  UnitFilterStrategy <|.. MedicationAvailableFilter
+  UnitSortStrategy <|.. NameSort
+  UnitSortStrategy <|.. DistanceSort
+  filterUnits ..> UnitFilterStrategy : aplica todas
+  filterUnits ..> UnitSortStrategy : ordena
+  PostosList --> filterUnits
+```

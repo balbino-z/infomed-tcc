@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancela a execução anterior da mesma branch quando chega um commit novo
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    name: App (types, tests, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Unit and integration tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Save build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  database:
+    name: Database (schema, RLS and rules)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Supabase stand-ins (roles and auth schema)
+        run: psql -v ON_ERROR_STOP=1 -q -f db/ci/00_supabase_stub.sql
+
+      - name: Apply migration scripts in order
+        run: |
+          for f in db/01_schema.sql db/02_seed.sql db/04_auth.sql db/05_postos_reais.sql db/06_agendamento.sql db/07_lembretes.sql; do
+            if [ -f "$f" ]; then
+              echo ">> $f"
+              psql -v ON_ERROR_STOP=1 -q -f "$f"
+            else
+              echo ">> $f not found, skipping"
+            fi
+          done
+
+      - name: Run database tests (RLS, business rules, validations)
+        run: psql -v ON_ERROR_STOP=1 -f db/ci/tests.sql

@@ -68,4 +68,14 @@ export class SupabaseHealthUnitRepository implements HealthUnitRepository {
       .filter((x): x is UnitMedication => x !== null)
       .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
   }
+
+  async unitIdsWithMedication(medicationId: string): Promise<string[]> {
+    const { data, error } = await this.db
+      .from('unit_medications')
+      .select('unit_id')
+      .eq('medication_id', medicationId)
+      .eq('status', 'disponivel');
+    if (error) throw error;
+    return (data as { unit_id: string }[]).map((r) => r.unit_id);
+  }
 }

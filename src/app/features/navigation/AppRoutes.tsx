@@ -26,6 +26,7 @@ import { useAuth } from '../auth/AuthContext';
 import { healthUnitRepository, medicationRepository } from '../../repositories';
 import { useAppData } from './AppData';
 import { useAppNavigate } from './useAppNavigate';
+import { DEFAULT_FILTERS } from '../units/filters/types';
 import { screenFromPath } from './routes';
 import type { AppState } from './types';
 
@@ -105,8 +106,8 @@ export function AppRoutes() {
       <Route path="/inicio" element={priv(<Home navigate={navigate} appState={appState} />)} />
       <Route path="/medicamentos" element={priv(<MedicationList navigate={navigate} />)} />
       <Route path="/medicamentos/:id" element={priv(<MedicationDetailRoute />)} />
-      <Route path="/postos" element={priv(<PostosList navigate={navigate} />)} />
-      <Route path="/postos/filtros" element={priv(<MapFilters navigate={navigate} />)} />
+      <Route path="/postos" element={priv(<PostosList navigate={navigate} filters={data.unitFilters ?? DEFAULT_FILTERS} />)} />
+      <Route path="/postos/filtros" element={priv(<MapFilters navigate={navigate} filters={data.unitFilters ?? DEFAULT_FILTERS} />)} />
       <Route path="/postos/:id" element={priv(<PostoDetailRoute />)} />
 
       <Route path="/agendar" element={priv(<ScheduleSpecialty navigate={navigate} />)} />

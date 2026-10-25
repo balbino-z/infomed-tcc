@@ -42,6 +42,7 @@ src/app/
   features/scheduling/    AppointmentFactory (padrão Factory), slots, dateUtils (fuso de São Paulo)
   features/notifications/ EventBus (padrão Observer), useUnreadCount
   features/reminders/     ReminderScheduler (hora do remédio, só com o app aberto), ReminderAlerts
+  features/units/filters/ estratégias de filtro e ordenação (padrão Strategy) + filterUnits
   features/units/         unitUtils (aberto/fechado, distância), UnitsMap (Leaflet), useUserLocation, testes
   lib/supabase.ts         cliente Supabase (null sem .env)
 db/                       01_schema, 02_seed, 03_teste_rls, 04_auth, (05_postos_reais gerado por script), 06_agendamento, 07_lembretes — numerados
@@ -72,26 +73,28 @@ Objetos: view `medications_with_status` (security_invoker); função `booked_slo
 
 ## 7. Comandos
 
+**CI:** `.github/workflows/ci.yml` roda 2 jobs a cada push/PR na `main`: App (npm ci, typecheck, test, build) e Database (PostgreSQL + `db/ci/00_supabase_stub.sql` + scripts 01-07 + `db/ci/tests.sql`). **Mudou regra do banco = atualizar `db/ci/tests.sql`** e rodar local com psql. Antes de dar push, rodar `npm run typecheck && npm test && npm run build`.
+
 Os testes (`vitest.config.ts`) forçam os repositórios Mock, mesmo com `.env`. Telas que usam `Header` precisam ser renderizadas dentro de `<MemoryRouter>` nos testes.
 
 ```
 npm install          # instalar dependências
 npm run dev          # rodar (http://localhost:5173)
 npm test             # testes (Vitest: auth, postos, navegação)
-npx tsc --noEmit     # checar tipos
+npm run typecheck    # checar tipos (tsc --noEmit)
 npm run build        # build de produção
 ```
 Vitest está fixado na versão 3 (a 4+/5 exige Vite mais novo que o do projeto).
 
 ## 8. Estado atual (conferir em docs/PROGRESSO.md)
 
-Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas; agendamento completo (regras também no banco), histórico e cancelamento; lembretes e notificações; 37 testes; ADRs 001-012; fichas F01-F09.
+Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas; agendamento completo (regras também no banco), histórico e cancelamento; lembretes e notificações; filtros dos postos (Strategy); CI com 2 jobs (app e banco); 50 testes; README em inglês; ADRs 001-013; fichas F01-F11.
 Pendente de confirmação no ambiente real: login/cadastro no navegador, `db/04_auth.sql` no Supabase, teste de RLS com 2 contas (prints em `docs/evidence`).
-Pendente de construção: T9 em diante (ver seção 9). Pendente de confirmação no ambiente real: rodar `db/06` e `db/07` no Supabase. Dados ainda fixos: filtros do mapa (`MapFilters`).
+Pendente de construção: T11 (IA), T12 (BI), T13 (SUS) (ver seção 9). Pendente de confirmação no ambiente real: rodar `db/06` e `db/07` no Supabase. 
 
 ## 9. Fila de tarefas
 
-T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento (Factory) e T8 lembretes e notificações (Observer) **feitas** · T9 filtros dos postos (Strategy, a fazer) · T10 CI GitHub Actions + deploy · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento (Factory) e T8 lembretes e notificações (Observer) **feitas** · T9 filtros dos postos (Strategy) e T10 CI (GitHub Actions) **feitas** · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 

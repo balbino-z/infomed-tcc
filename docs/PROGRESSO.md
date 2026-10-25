@@ -121,4 +121,14 @@
 **Pendências:** rodar os dois SQL; testar o fluxo no PC e no celular com duas contas; prints e preencher a coluna "Resultado no Supabase" em `security/testes-rls.md`; avisos de lembrete só com o app aberto (limitação).
 **Próximo passo sugerido:** T9 (filtros com padrão Strategy), T10 (CI GitHub Actions), T11 (IA), T12 (BI), T13 (pesquisa SUS). Sugestão de divisão: dev A = T9 + T10; dev B = T11 + T12; ambos = T13.
 
-### Sessão 10 — (a preencher) — (nome)
+### Sessão 10 — 20/10/2026 — dono do repositório
+**Tarefa:** T9 (filtros com Strategy) e T10 (CI com GitHub Actions)
+**Feito:**
+- T9: padrão **Strategy** (`features/units/filters/`): 4 filtros (aberto agora, distância, serviços, medicamento disponível) e 2 ordenações (nome, distância); tela `MapFilters` funcional (serviços vêm das unidades; medicamentos do catálogo); `PostosList` aplica os filtros, mostra contador e "N postos com os filtros escolhidos"; `unitIdsWithMedication` nos repositórios (Mock e Supabase); ADR-013, ficha F10 e diagrama.
+- T10: `.github/workflows/ci.yml` com dois jobs (**App**: npm ci, typecheck, testes, build; **Database**: PostgreSQL 16 + substitutos do Supabase + scripts 01 a 07 + `db/ci/tests.sql`); testes de banco convertidos de manuais para automáticos e validados por mutação; scripts `typecheck` e `test`; `README.md` em inglês na raiz (cumpre a parte do README em inglês da Língua Inglesa II); ADR-006 atualizado; ficha F11.
+**SQL novo para rodar no Supabase:** nenhum.
+**Testes:** tsc ok, 50 testes ok, build ok; job App simulado em cópia limpa com `npm ci`; job Database simulado em PostgreSQL local (passa; com defeito injetado, falha); workflow validado com actionlint. O pipeline em si ainda não rodou no GitHub.
+**Pendências:** aplicar `npm pkg set scripts.typecheck="tsc --noEmit"` (e conferir que `test` existe); confirmar que `package-lock.json` está no Git; dar `push` e conferir a aba Actions; print do pipeline verde; opcional: proteger a `main` exigindo os dois jobs.
+**Próximo passo sugerido:** T11 (IA) e T12 (BI) pelo dono; T13 (pesquisa SUS) depois.
+
+### Sessão 11 — (a preencher) — (nome)

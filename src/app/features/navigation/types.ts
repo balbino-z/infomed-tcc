@@ -1,5 +1,6 @@
 import type { Appointment, AppointmentKind, Doctor, Specialty } from '../../domain/appointment';
 import type { HealthUnit } from '../../domain/health-unit';
+import type { UnitFilters } from '../units/filters/types';
 
 export type Screen =
   | 'welcome'
@@ -30,6 +31,7 @@ export interface AppState {
   currentScreen: Screen;
   selectedMedication?: any;
   selectedPosto?: HealthUnit;
+  unitFilters?: UnitFilters; // filtros escolhidos na lista de postos
   // fluxo de agendamento
   selectedKind?: AppointmentKind;
   selectedSpecialty?: Specialty;

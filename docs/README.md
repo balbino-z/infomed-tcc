@@ -20,13 +20,14 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | 003 | Padrão Repository para acesso a dados | Aceita |
 | 004 | Supabase como backend e banco de dados na nuvem | Aceita (implementada) |
 | 005 | Leaflet e OpenStreetMap para mapas | Aceita (implementada) |
-| 006 | Integração e entrega contínuas com GitHub Actions | Aceita (a implementar) |
+| 006 | Integração e entrega contínuas com GitHub Actions e Vercel | Aceita (implementada) |
 | 007 | Variáveis de ambiente e gestão de chaves | Aceita |
 | 008 | Autenticação com Supabase Auth e consentimento LGPD | Aceita |
 | 009 | PWA instalável e hospedagem na Vercel | Aceita |
 | 010 | Navegação por rotas com react-router | Aceita (implementada) |
 | 011 | Agendamento: regras no banco e padrão Factory | Aceita (implementada) |
 | 012 | Padrão Observer para notificações e lembretes | Aceita (implementada) |
+| 013 | Padrão Strategy para filtros e ordenação dos postos | Aceita (implementada) |
 
 ## Índice de features
 
@@ -41,14 +42,16 @@ Esta pasta reúne o material que alimenta o texto final do TCC. Regra: **feature
 | F07 | Navegação por rotas (voltar e links diretos) | Concluída (falta registrar evidências) |
 | F08 | Agendamento, histórico e cancelamento | Concluída (falta registrar evidências) |
 | F09 | Lembretes de medicação e notificações | Concluída (falta registrar evidências) |
+| F10 | Filtros e ordenação dos postos | Concluída (falta registrar evidências) |
+| F11 | Integração contínua e testes do banco | Concluída (falta o print do pipeline) |
 
 ## Mapa disciplina → onde está documentado
 
 | Disciplina | Onde |
 |---|---|
-| Modelagem de Padrões de Projetos | ADR-003, ADR-011 (Factory), ADR-012 (Observer), F01, F03, F06, F08, F09, `diagrams/padroes-de-projeto.md` |
+| Modelagem de Padrões de Projetos | ADR-003, ADR-011 (Factory), ADR-012 (Observer), ADR-013 (Strategy), F01, F03, F06, F08, F09, F10, `diagrams/padroes-de-projeto.md` |
 | Programação Multi Plataforma | ADR-001, ADR-005, ADR-009, ADR-010, F05, F06, F07 |
 | Computação em Nuvem | ADR-004, ADR-009, F02, F05 |
 | Segurança e Defesa Cibernética | ADR-004, ADR-007, ADR-008, ADR-011, `security/testes-rls.md`, F02, F04, F08 |
-| Integração e Entrega Contínua | ADR-006 (a implementar), ADR-009 (deploy automático) |
+| Integração e Entrega Contínua | ADR-006, ADR-009 (deploy automático), F11 |
 | Projeto Integrador II | ADR-002 e todo o conjunto |
