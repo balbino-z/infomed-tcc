@@ -78,7 +78,7 @@ export function Profile({ navigate }: ProfileProps) {
               <Mail className="w-5 h-5 text-[#64748B] mt-0.5" />
               <div className="flex-1">
                 <p className="text-[#64748B] text-sm">E-mail</p>
-                <p className="text-[#1A2B48]">maria.silva@email.com</p>
+                <p className="text-[#1A2B48]">oviniciusbalbino@gmail.com</p>
               </div>
             </div>
             
@@ -86,7 +86,7 @@ export function Profile({ navigate }: ProfileProps) {
               <Phone className="w-5 h-5 text-[#64748B] mt-0.5" />
               <div className="flex-1">
                 <p className="text-[#64748B] text-sm">Telefone</p>
-                <p className="text-[#1A2B48]">(11) 98765-4321</p>
+                <p className="text-[#1A2B48]">(19) 9999-9999</p>
               </div>
             </div>
             
@@ -94,7 +94,7 @@ export function Profile({ navigate }: ProfileProps) {
               <Calendar className="w-5 h-5 text-[#64748B] mt-0.5" />
               <div className="flex-1">
                 <p className="text-[#64748B] text-sm">Data de Nascimento</p>
-                <p className="text-[#1A2B48]">15/03/1985</p>
+                <p className="text-[#1A2B48]">24/07/2006</p>
               </div>
             </div>
             
@@ -103,7 +103,7 @@ export function Profile({ navigate }: ProfileProps) {
               <div className="flex-1">
                 <p className="text-[#64748B] text-sm">Endereço</p>
                 <p className="text-[#1A2B48]">Rua das Flores, 123 - Centro</p>
-                <p className="text-[#64748B] text-sm">São Paulo, SP</p>
+                <p className="text-[#64748B] text-sm">Santa Barbara D`Oeste, SP</p>
               </div>
             </div>
           </div>
