@@ -3,3 +3,6 @@ dist
 .env
 .env.local
 .vercel
+# Anotações locais com senhas (nunca versionar)
+docs/senha*
+*senha*.md
