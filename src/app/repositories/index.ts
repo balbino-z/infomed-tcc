@@ -5,6 +5,12 @@ import type { NotificationRepository } from './NotificationRepository';
 import type { ReminderRepository } from './ReminderRepository';
 import type { HealthUnitRepository } from './HealthUnitRepository';
 import type { MedicationRepository } from './MedicationRepository';
+import type { ProfileRepository } from './ProfileRepository';
+import type { AnalyticsRepository } from './AnalyticsRepository';
+import { MockProfileRepository } from './mock/MockProfileRepository';
+import { MockAnalyticsRepository } from './mock/MockAnalyticsRepository';
+import { SupabaseProfileRepository } from './supabase/SupabaseProfileRepository';
+import { SupabaseAnalyticsRepository } from './supabase/SupabaseAnalyticsRepository';
 import { MockAppointmentRepository } from './mock/MockAppointmentRepository';
 import { MockNotificationRepository } from './mock/MockNotificationRepository';
 import { MockReminderRepository } from './mock/MockReminderRepository';
@@ -43,3 +49,11 @@ export const notificationRepository: NotificationRepository = hasSupabase
 export const reminderRepository: ReminderRepository = hasSupabase
   ? new SupabaseReminderRepository(supabase!)
   : new MockReminderRepository();
+
+export const profileRepository: ProfileRepository = hasSupabase
+  ? new SupabaseProfileRepository(supabase!)
+  : new MockProfileRepository();
+
+export const analyticsRepository: AnalyticsRepository = hasSupabase
+  ? new SupabaseAnalyticsRepository(supabase!)
+  : new MockAnalyticsRepository();

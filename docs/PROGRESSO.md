@@ -131,4 +131,22 @@
 **Pendências:** aplicar `npm pkg set scripts.typecheck="tsc --noEmit"` (e conferir que `test` existe); confirmar que `package-lock.json` está no Git; dar `push` e conferir a aba Actions; print do pipeline verde; opcional: proteger a `main` exigindo os dois jobs.
 **Próximo passo sugerido:** T11 (IA) e T12 (BI) pelo dono; T13 (pesquisa SUS) depois.
 
-### Sessão 11 — (a preencher) — (nome)
+### Sessão 11 — 18/11/2026 — dono do repositório (com Claude Code)
+**Tarefa:** T11 (triagem por IA), T12 (Perfil real e painel de BI) e assistente em camadas, seguindo `RELATORIO-FINAL-INFOMED.md`
+**Auditoria inicial:**
+- `docs/decisions` estava no Git como um **arquivo** (só o ADR-003), não como pasta; os ADR-001 a 013 existiam só dentro dos zips. Pasta recriada com a versão mais recente de cada ADR.
+- `db/06_agendamento.sql` tinha um "p" solto (`end if;p`, entrou no commit d4f868f3) que quebra o script e o job Database do CI. Corrigido.
+- O Perfil editável do `InfoMed-perfil-corrigido.zip` (27/10) nunca chegou ao código; foi aproveitado como base da T12.
+- `docs/senha supabase.md` está versionado no Git (ver pendências).
+**Feito:**
+- T11: Naive Bayes em JavaScript puro, no aparelho (`features/triage/`); sinais de alerta antes do modelo (SAMU 192, Bombeiros 193, CVV 188); Pediatria só com menção a criança; limiar 0,6 → Clínico Geral por precaução; compatibilidade alta/média/baixa; tela `/triagem`, cartão na Home e atalho em Agendar. Dados sintéticos em `data/triagem/`, `scripts/treinar-triagem.mjs`, `docs/ml/avaliacao-triagem.md`: **validação cruzada 83,5% (± 3,0%)**, teste separado 98,2% (alfa = 1). ADR-014, F12.
+- T12: `db/08_bi.sql` (`is_admin`, **GRANT de UPDATE só em nome, nascimento e telefone** — antes qualquer usuário poderia se promover a admin ou apagar o aceite LGPD —, `is_admin()`, `bi_dashboard(p_days)` agregado); `db/09_perfil.sql` (validações); `db/demo/` (40 usuários e ~420 consultas fictícias + remoção); `ProfileRepository` e `AnalyticsRepository` (Mock e Supabase); Perfil sem dados fixos, com edição, data do aceite LGPD, contadores reais e "Painel de BI" só para admin; `Dashboard.tsx` (`/painel`, carregado sob demanda) com KPIs, gráficos e CSV. ADR-015, F13.
+- Assistente: Chain of Responsibility (alerta → FAQ forte → intenções com ações no app → FAQ → não entendeu), tudo local, sem LLM e sem gravar o texto; tela `/assistente` e botão flutuante. LLM documentado como trabalho futuro. ADR-016, F14, diagrama em `padroes-de-projeto.md`.
+- CI: workflow aplica 08 e 09 e testa carga/remoção dos dados de demonstração; `db/ci/tests.sql` ganhou 7 verificações (perfil e BI) e o stub de `auth.users` ganhou colunas.
+**SQL novo para rodar no Supabase (nessa ordem):** `db/06_agendamento.sql`, `db/07_lembretes.sql` (se ainda não rodados), `db/08_bi.sql`, `db/09_perfil.sql`. Depois promover o administrador: `update public.profiles set is_admin = true where id = '<uuid>';`. Opcional para a apresentação: `db/demo/demo_data.sql` (apagar depois com `remove_demo_data.sql`). — **ainda não rodados**.
+**Testes:** tsc ok; 104 testes ok (eram 50); build ok (painel em pacote separado). Scripts 01 a 09, `tests.sql` e dados de demonstração validados num PostgreSQL embutido (PGlite), com 4 mutações de segurança detectadas pelos testes. Telas novas conferidas no navegador em modo Mock (celular 375 px). O pipeline do GitHub ainda não rodou com estas mudanças.
+**Pendências / bloqueios:** rodar os SQL no Supabase e repetir o teste de isolamento com 2 contas; tirar `docs/senha supabase.md` do Git e trocar a senha do banco no Supabase (ela continua no histórico); prints em `docs/evidence`; T13 (pesquisa SUS).
+**Próximo passo sugerido:** rodar os SQL, testar no celular, prints; depois T13.
+**Docs atualizados:** ADR-014, ADR-015, ADR-016 / F12, F13, F14 / `docs/ml/avaliacao-triagem.md`, `diagrams/padroes-de-projeto.md`, README, CONTEXTO-IA
+
+### Sessão 12 — (a preencher) — (nome)

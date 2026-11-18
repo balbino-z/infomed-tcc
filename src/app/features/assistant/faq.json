@@ -1,0 +1,78 @@
+[
+  {
+    "id": "horario-ubs",
+    "question": "Qual o horário de funcionamento das UBS?",
+    "keywords": "horario funcionamento abre fecha atende sabado domingo fim de semana",
+    "answer": "Cada UBS tem seu próprio horário, em geral de segunda a sexta. Na lista de Postos você vê se a unidade está aberta agora e a que horas abre ou fecha.",
+    "action": { "label": "Ver postos", "screen": "postos" }
+  },
+  {
+    "id": "documentos",
+    "question": "Quais documentos levar na consulta?",
+    "keywords": "documento documentos levar consulta cartao sus rg cpf comprovante endereco",
+    "answer": "Leve um documento com foto, o Cartão Nacional de Saúde (Cartão SUS) ou CPF e, se tiver, receitas e exames anteriores. Chegue com alguns minutos de antecedência."
+  },
+  {
+    "id": "cartao-sus",
+    "question": "Como faço o Cartão SUS?",
+    "keywords": "cartao sus fazer tirar emitir cns cadastro",
+    "answer": "O Cartão SUS pode ser feito em qualquer UBS levando documento com foto, CPF e comprovante de endereço. O número também aparece no app Meu SUS Digital, do Ministério da Saúde."
+  },
+  {
+    "id": "vacinas",
+    "question": "Onde tomar vacina?",
+    "keywords": "vacina vacinacao vacinar tomar gripe covid carteira campanha",
+    "answer": "As vacinas do calendário são aplicadas nas UBS com sala de vacinação. Leve a carteira de vacinação e um documento. Em Postos, use os filtros para ver as unidades que oferecem Vacinação.",
+    "action": { "label": "Filtrar postos", "screen": "map-filters" }
+  },
+  {
+    "id": "receita",
+    "question": "Preciso de receita para retirar remédio?",
+    "keywords": "receita retirar remedio medicamento farmacia gratis pegar buscar",
+    "answer": "Sim. Para retirar medicamentos na farmácia da UBS é preciso apresentar receita válida e documento. A disponibilidade mostrada no app é uma simulação; confirme com a unidade antes de ir."
+  },
+  {
+    "id": "estoque-simulado",
+    "question": "A disponibilidade dos remédios é real?",
+    "keywords": "estoque real verdade confiavel disponibilidade simulado atualizado",
+    "answer": "Não. Neste projeto o estoque por unidade é simulado, porque não há uma fonte pública com esses dados. As unidades, endereços e horários vêm das páginas da Prefeitura de Santa Bárbara d'Oeste."
+  },
+  {
+    "id": "urgencia",
+    "question": "Quando procurar o pronto-socorro em vez da UBS?",
+    "keywords": "urgencia emergencia pronto socorro upa hospital grave samu",
+    "answer": "A UBS cuida de consultas, acompanhamento e prevenção. Em casos graves ou súbitos (dor no peito, falta de ar, desmaio, sangramento intenso, acidente) procure o pronto-socorro ou ligue 192 (SAMU)."
+  },
+  {
+    "id": "privacidade",
+    "question": "O que o app faz com meus dados?",
+    "keywords": "dados privacidade lgpd seguranca guardar compartilha informacoes pessoais",
+    "answer": "Seus dados pessoais ficam protegidos no banco e só a sua conta consegue vê-los. O que você digita aqui no assistente e na triagem é analisado no aparelho e não é guardado. Os indicadores do painel são apenas números agregados."
+  },
+  {
+    "id": "lembrete-funciona",
+    "question": "Os lembretes tocam com o app fechado?",
+    "keywords": "lembrete alarme tocar notificacao fechado celular aviso",
+    "answer": "Nesta versão o aviso \"Hora do remédio\" aparece só com o app aberto. Notificações com o app fechado ficaram como trabalho futuro.",
+    "action": { "label": "Meus lembretes", "screen": "reminders" }
+  },
+  {
+    "id": "instalar",
+    "question": "Como instalar o app no celular?",
+    "keywords": "instalar baixar celular tela inicial aplicativo android atalho",
+    "answer": "No Chrome do Android, abra o InfoMed, toque no menu (três pontinhos) e escolha \"Adicionar à tela inicial\" ou \"Instalar app\"."
+  },
+  {
+    "id": "faltar",
+    "question": "E se eu não puder ir à consulta?",
+    "keywords": "faltar nao posso ir atrasar remarcar desmarcar imprevisto",
+    "answer": "Cancele com antecedência para liberar o horário para outra pessoa: em Histórico, toque na consulta e em Cancelar. Depois é só agendar um novo horário.",
+    "action": { "label": "Abrir histórico", "screen": "history" }
+  },
+  {
+    "id": "sobre",
+    "question": "O que é o InfoMed?",
+    "keywords": "infomed sobre app aplicativo serve funciona ajuda usar",
+    "answer": "O InfoMed reúne, para Santa Bárbara d'Oeste, as UBS no mapa, a disponibilidade (simulada) de medicamentos, o agendamento de consultas e lembretes de remédio. É um projeto de TCC e não substitui orientação profissional."
+  }
+]

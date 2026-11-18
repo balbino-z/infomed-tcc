@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Stethoscope, Baby, HeartPulse, Smile, type LucideIcon } from 'lucide-react';
+import { Stethoscope, Baby, HeartPulse, Smile, Sparkles, type LucideIcon } from 'lucide-react';
 import { Screen } from '../../App';
 import { Header } from '../shared/Header';
 import { SearchBar } from '../shared/SearchBar';
@@ -50,6 +50,13 @@ export function ScheduleSpecialty({ navigate }: ScheduleSpecialtyProps) {
           <h2 className="text-[#1A2B48] mb-2">Escolha a Especialidade</h2>
           <p className="text-[#64748B]">Passo 1 de 3</p>
         </div>
+
+        <button
+          onClick={() => navigate('triage')}
+          className="w-full mb-4 flex items-center gap-2 text-sm text-[#0A73FF] bg-[#E8F1FF] rounded-xl px-3 py-2"
+        >
+          <Sparkles className="w-4 h-4" /> Não sabe qual escolher? Descreva o que sente
+        </button>
 
         {/* Tipo de agendamento (Factory) */}
         <div className="flex gap-2 mb-4" role="radiogroup" aria-label="Tipo de agendamento">

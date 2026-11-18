@@ -79,7 +79,7 @@ jobs:
 
       - name: Apply migration scripts in order
         run: |
-          for f in db/01_schema.sql db/02_seed.sql db/04_auth.sql db/05_postos_reais.sql db/06_agendamento.sql db/07_lembretes.sql; do
+          for f in db/01_schema.sql db/02_seed.sql db/04_auth.sql db/05_postos_reais.sql db/06_agendamento.sql db/07_lembretes.sql db/08_bi.sql db/09_perfil.sql; do
             if [ -f "$f" ]; then
               echo ">> $f"
               psql -v ON_ERROR_STOP=1 -q -f "$f"
@@ -90,3 +90,12 @@ jobs:
 
       - name: Run database tests (RLS, business rules, validations)
         run: psql -v ON_ERROR_STOP=1 -f db/ci/tests.sql
+
+      - name: Demo data loads and is fully removed
+        run: |
+          psql -v ON_ERROR_STOP=1 -q -f db/demo/demo_data.sql
+          test "$(psql -tAc "select count(*) from auth.users where email like 'demo%@infomed.invalid'")" = "40"
+          test "$(psql -tAc "select count(*) > 300 from public.appointments")" = "t"
+          psql -v ON_ERROR_STOP=1 -q -f db/demo/remove_demo_data.sql
+          test "$(psql -tAc "select count(*) from public.appointments")" = "0"
+          test "$(psql -tAc "select count(*) from public.profiles")" = "0"

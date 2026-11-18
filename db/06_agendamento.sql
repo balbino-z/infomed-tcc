@@ -33,7 +33,7 @@ begin
      where d.id = new.doctor_id;
     if not found then
       raise exception 'Médico inválido';
-    end if;p
+    end if;
 
     local_ts := new.starts_at at time zone 'America/Sao_Paulo';
     dow := extract(dow from local_ts);

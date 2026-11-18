@@ -3,6 +3,7 @@ import { AuthProvider } from './features/auth/AuthContext';
 import { AppDataProvider } from './features/navigation/AppData';
 import { AppRoutes } from './features/navigation/AppRoutes';
 import { ReminderAlerts } from './features/reminders/ReminderAlerts';
+import { AssistantFab } from './components/shared/AssistantFab';
 import IPhoneBezel from './imports/IPhoneBezel';
 
 // Os tipos agora moram em features/navigation/types.ts (as telas continuam importando daqui)
@@ -23,6 +24,7 @@ export default function App() {
                 <div className="h-full w-full bg-white">
                   <AppRoutes />
                   <ReminderAlerts />
+                  <AssistantFab />
                 </div>
               </div>
             </div>

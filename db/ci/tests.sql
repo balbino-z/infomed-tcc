@@ -121,6 +121,55 @@ select pg_temp.expect_count('select 1 from public.reminders', 0, 'Maria NÃO vê
 select pg_temp.expect_count('select 1 from public.my_appointments', 1, 'Maria vê só a própria consulta');
 select pg_temp.expect_count('select 1 from public.profiles', 1, 'Maria vê só o próprio perfil');
 
+-- ---------- PERFIL (09): edição e validações ----------
+update public.profiles set full_name = 'Maria Souza', phone = '19999998888', birth_date = '1990-05-10' where id = auth.uid();
+select pg_temp.expect_count($$ select 1 from public.profiles where full_name = 'Maria Souza' and phone = '19999998888' $$, 1, 'Maria edita nome, telefone e nascimento');
+select pg_temp.expect_error($$ update public.profiles set phone = '123' where id = auth.uid() $$, 'profiles_phone_valid');
+select pg_temp.expect_error($$ update public.profiles set phone = '(19) 99999-8888' where id = auth.uid() $$, 'profiles_phone_valid');
+select pg_temp.expect_error($$ update public.profiles set birth_date = current_date + 1 where id = auth.uid() $$, 'profiles_birth_date_valid');
+select pg_temp.expect_error($$ update public.profiles set birth_date = '1850-01-01' where id = auth.uid() $$, 'profiles_birth_date_valid');
+select pg_temp.expect_error($$ update public.profiles set full_name = repeat('x', 121) where id = auth.uid() $$, 'profiles_full_name_len');
+
+-- ---------- BI (08): só administrador, só agregados ----------
+select pg_temp.expect_error($$ update public.profiles set is_admin = true where id = auth.uid() $$, 'permission denied');
+select pg_temp.expect_error($$ update public.profiles set lgpd_consent_at = null where id = auth.uid() $$, 'permission denied');
+select pg_temp.expect_count($$ select 1 where not public.is_admin() $$, 1, 'usuário comum não é administrador');
+select pg_temp.expect_error($$ select public.bi_dashboard(30) $$, 'restrito');
+
+-- promoção manual (como no SQL Editor, fora do papel authenticated)
+reset role;
+update public.profiles set is_admin = true where id = 'aaaaaaaa-0000-0000-0000-000000000001';
+create temp table expected as
+select (select count(*) from public.appointments) as appts,
+       (select count(*) from public.appointments where status = 'cancelada') as cancelled,
+       (select count(*) from public.profiles) as users;
+grant select on expected to authenticated;
+set local role authenticated;
+select set_config('request.jwt.claim.sub', 'aaaaaaaa-0000-0000-0000-000000000001', true);
+
+select pg_temp.expect_count($$ select 1 where public.is_admin() $$, 1, 'Maria agora é administradora');
+select pg_temp.expect_count($$
+  select 1 from (select public.bi_dashboard(90) as j) x, expected e
+   where e.appts > 0
+     and (j->'kpis'->>'appointments')::int = e.appts
+     and (j->'kpis'->>'cancelled')::int = e.cancelled
+     and (j->'kpis'->>'users')::int = e.users
+     and (j->'kpis'->>'usersWithConsent')::int = 1 $$, 1, 'administrador recebe os KPIs corretos');
+select pg_temp.expect_count($$
+  select 1 from (select public.bi_dashboard(90) as j) x
+   where jsonb_array_length(j->'bySpecialty') >= 1 and jsonb_array_length(j->'byUnit') >= 1
+     and jsonb_array_length(j->'byWeek') >= 1 and jsonb_array_length(j->'byHour') >= 1
+     and jsonb_array_length(j->'byKind') >= 1 and jsonb_array_length(j->'stockByUnit') >= 1 $$, 1, 'administrador recebe as séries do painel');
+select pg_temp.expect_count($$
+  select 1 from (select public.bi_dashboard(365)::text as t) x
+   where t !~* '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}' and t !~ '@' and t !~* 'maria|joao' $$, 1, 'painel não devolve ids, e-mails nem nomes de pacientes');
+select pg_temp.expect_error($$ select public.bi_dashboard(0) $$, 'Período');
+select pg_temp.expect_error($$ select public.bi_dashboard(366) $$, 'Período');
+
+select set_config('request.jwt.claim.sub', 'bbbbbbbb-0000-0000-0000-000000000002', true);
+select pg_temp.expect_error($$ select public.bi_dashboard(30) $$, 'restrito');
+select pg_temp.expect_count($$ select 1 from public.profiles where is_admin $$, 0, 'João não enxerga o perfil (nem o papel) da administradora');
+
 reset role;
 rollback;  -- não deixa dados de teste
 \echo '=== TODOS OS TESTES DO BANCO PASSARAM ==='

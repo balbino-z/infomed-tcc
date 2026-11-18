@@ -8,6 +8,8 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (input: SignUpInput) => Promise<SignUpResult>;
   signOut: () => Promise<void>;
+  /** Relê o usuário da sessão (ex.: depois de mudar o nome no Perfil). */
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -38,6 +40,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signOut: async () => {
       await authRepository.signOut();
       setUser(null);
+    },
+    refreshUser: async () => {
+      setUser(await authRepository.getCurrentUser());
     },
   };
 

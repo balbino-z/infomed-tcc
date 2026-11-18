@@ -25,6 +25,9 @@ export const SCREEN_PATH: Record<Screen, string> = {
   reminders: '/lembretes',
   'create-reminder': '/lembretes/novo',
   profile: '/perfil',
+  triage: '/triagem',
+  dashboard: '/painel',
+  assistant: '/assistente',
 };
 
 /** Monta a URL de uma tela, usando o item escolhido quando a rota tem ":id". */

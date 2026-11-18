@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pill, MapPin, Calendar, Clock, ChevronRight } from 'lucide-react';
+import { Pill, MapPin, Calendar, Clock, ChevronRight, Sparkles } from 'lucide-react';
 import { Screen, AppState } from '../../App';
 import { SearchBar } from '../shared/SearchBar';
 import { BottomNav } from '../shared/BottomNav';
@@ -116,6 +116,21 @@ export function Home({ navigate, appState }: HomeProps) {
             </button>
           </div>
         </div>
+
+        {/* Triagem por IA */}
+        <button
+          onClick={() => navigate('triage')}
+          className="w-full mb-8 bg-white p-4 rounded-2xl border border-[#E8F1FF] hover:border-[#0A73FF] transition-all flex items-center gap-4 text-left"
+        >
+          <div className="w-12 h-12 bg-[#0A73FF]/10 rounded-xl flex items-center justify-center shrink-0">
+            <Sparkles className="w-6 h-6 text-[#0A73FF]" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[#1A2B48]">Não sabe qual especialista?</p>
+            <p className="text-[#64748B] text-sm">Descreva o que sente e receba uma sugestão</p>
+          </div>
+          <ChevronRight className="w-5 h-5 text-[#CED6E0]" />
+        </button>
 
         {/* Próximas Consultas */}
         <div className="mb-8">

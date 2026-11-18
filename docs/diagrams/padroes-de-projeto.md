@@ -108,3 +108,44 @@ classDiagram
   filterUnits ..> UnitSortStrategy : ordena
   PostosList --> filterUnits
 ```
+
+## Chain of Responsibility: assistente (ADR-016)
+
+Cada elo tenta responder; se devolver `null`, a mensagem passa para o próximo. O alerta vem sempre primeiro.
+
+```mermaid
+flowchart LR
+  M[Mensagem] --> A{Alerta?<br/>emergency.ts}
+  A -- sim --> R1[Ligar 192 / 188]
+  A -- não --> F1{FAQ quase exata?}
+  F1 -- sim --> R2[Resposta da FAQ]
+  F1 -- não --> I{Intenção?<br/>remédio, aberto agora,<br/>agendar, cancelar,<br/>lembretes, sintomas}
+  I -- sim --> R3[Resposta + botão<br/>para a tela do app]
+  I -- não --> F2{FAQ aproximada?}
+  F2 -- sim --> R2
+  F2 -- não --> R4[Não entendi +<br/>sugestões]
+```
+
+```mermaid
+classDiagram
+  class AssistantHandler {
+    <<interface>>
+    +name string
+    +handle(message, ctx) AssistantReply | null
+  }
+  class alertHandler
+  class strongFaqHandler
+  class intentHandler
+  class faqHandler
+  class fallbackHandler
+  class answer {
+    +answer(message, ctx, chain)
+  }
+  AssistantHandler <|.. alertHandler
+  AssistantHandler <|.. strongFaqHandler
+  AssistantHandler <|.. intentHandler
+  AssistantHandler <|.. faqHandler
+  AssistantHandler <|.. fallbackHandler
+  answer ..> AssistantHandler : percorre em ordem
+  intentHandler ..> analyzeSymptoms : triagem (ADR-014)
+```

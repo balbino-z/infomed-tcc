@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from 'react';
+import { lazy, Suspense, useEffect, useState, type ReactElement } from 'react';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router';
 import { Welcome } from '../../components/screens/Welcome';
 import { Onboarding1 } from '../../components/screens/Onboarding1';
@@ -22,6 +22,11 @@ import { History } from '../../components/screens/History';
 import { RemindersList } from '../../components/screens/RemindersList';
 import { CreateReminder } from '../../components/screens/CreateReminder';
 import { Profile } from '../../components/screens/Profile';
+import { Triage } from '../../components/screens/Triage';
+import { Assistant } from '../../components/screens/Assistant';
+
+// Painel de BI (Recharts) só é baixado quando o administrador abre a tela
+const Dashboard = lazy(() => import('../../components/screens/Dashboard'));
 import { useAuth } from '../auth/AuthContext';
 import { healthUnitRepository, medicationRepository } from '../../repositories';
 import { useAppData } from './AppData';
@@ -122,6 +127,9 @@ export function AppRoutes() {
       <Route path="/lembretes" element={priv(<RemindersList navigate={navigate} />)} />
       <Route path="/lembretes/novo" element={priv(<CreateReminder navigate={navigate} medication={data.selectedMedication} />)} />
       <Route path="/perfil" element={priv(<Profile navigate={navigate} />)} />
+      <Route path="/triagem" element={priv(<Triage navigate={navigate} />)} />
+      <Route path="/assistente" element={priv(<Assistant navigate={navigate} />)} />
+      <Route path="/painel" element={priv(<Suspense fallback={<Loading />}><Dashboard navigate={navigate} /></Suspense>)} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

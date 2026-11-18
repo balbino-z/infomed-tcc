@@ -47,7 +47,8 @@ src/app/
   lib/supabase.ts         cliente Supabase (null sem .env)
 db/                       01_schema, 02_seed, 03_teste_rls, 04_auth, (05_postos_reais gerado por script), 06_agendamento, 07_lembretes — numerados
 data/ e scripts/          dados das UBS reais e scripts que geram o SQL (T3)
-docs/                     decisions (ADR-001..008), features (F01..F04), diagrams, security, evidence, PROGRESSO.md
+docs/                     decisions (ADR-001..016), features (F01..F14), ml (avaliação da triagem), diagrams, security, evidence, PROGRESSO.md
+db/demo/                  dados FICTÍCIOS para o painel de BI (demo_data.sql) e a remoção (remove_demo_data.sql)
 ```
 
 ## 5. Banco de dados (Supabase, região São Paulo)
@@ -88,13 +89,13 @@ Vitest está fixado na versão 3 (a 4+/5 exige Vite mais novo que o do projeto).
 
 ## 8. Estado atual (conferir em docs/PROGRESSO.md)
 
-Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas; agendamento completo (regras também no banco), histórico e cancelamento; lembretes e notificações; filtros dos postos (Strategy); CI com 2 jobs (app e banco); 50 testes; README em inglês; ADRs 001-013; fichas F01-F11.
+Feito: limpeza do export do Figma Make; git/GitHub; tsconfig; padrão Repository (Medication e Auth); banco com RLS e seed; tela de Medicamentos lendo do banco; login/cadastro com aceite LGPD; 4 testes automatizados; PWA configurado e publicado na Vercel; unidades reais de Santa Bárbara d'Oeste no banco (estoque e médicos SIMULADOS); telas de Postos com mapa Leaflet e "Perto de mim"; navegação por rotas; agendamento completo (regras também no banco), histórico e cancelamento; lembretes e notificações; filtros dos postos (Strategy); CI com 2 jobs (app e banco); README em inglês; T11 triagem por IA no aparelho (Naive Bayes, `features/triage`); T12 Perfil real e painel de BI (`/painel`, só administrador, `db/08` e `db/09`); assistente em camadas (Chain of Responsibility, `/assistente`, sem LLM); 104 testes; ADRs 001-016; fichas F01-F14.
 Pendente de confirmação no ambiente real: login/cadastro no navegador, `db/04_auth.sql` no Supabase, teste de RLS com 2 contas (prints em `docs/evidence`).
-Pendente de construção: T11 (IA), T12 (BI), T13 (SUS) (ver seção 9). Pendente de confirmação no ambiente real: rodar `db/06` e `db/07` no Supabase. 
+Pendente de construção: T13 (pesquisa SUS). Pendente de confirmação no ambiente real: rodar `db/06`, `db/07`, `db/08` e `db/09` no Supabase (nessa ordem) e promover o administrador manualmente.
 
 ## 9. Fila de tarefas
 
-T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento (Factory) e T8 lembretes e notificações (Observer) **feitas** · T9 filtros dos postos (Strategy) e T10 CI (GitHub Actions) **feitas** · T11 IA (sintoma → especialidade, Edge Function, aviso de que não substitui consulta) · T12 dashboard de BI · T13 pesquisa SUS.
+T1, T2, T3 (unidades reais, ver `docs/data/fontes-unidades.md`), T4 (`HealthUnitRepository` e telas de Postos) e T5 (mapa Leaflet) **feitas** · T6 (react-router) **feita** · T7 agendamento (Factory) e T8 lembretes e notificações (Observer) **feitas** · T9 filtros dos postos (Strategy) e T10 CI (GitHub Actions) **feitas** · T11 IA (triagem no aparelho, ADR-014) **feita** · T12 Perfil e painel de BI (ADR-015) **feita** · assistente em camadas (ADR-016) **feito** · T13 pesquisa SUS.
 
 ## 10. Armadilhas já encontradas
 

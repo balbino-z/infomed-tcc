@@ -11,6 +11,12 @@ create table if not exists auth.users (
   id uuid primary key default gen_random_uuid(),
   raw_user_meta_data jsonb default '{}'::jsonb
 );
+-- colunas usadas pelos dados de demonstração (db/demo/demo_data.sql)
+alter table auth.users add column if not exists email text;
+alter table auth.users add column if not exists aud text;
+alter table auth.users add column if not exists role text;
+alter table auth.users add column if not exists created_at timestamptz default now();
+alter table auth.users add column if not exists updated_at timestamptz default now();
 
 -- No Supabase, auth.uid() lê o usuário do token (JWT). Aqui lemos de uma configuração da sessão.
 create or replace function auth.uid() returns uuid

@@ -17,6 +17,9 @@ InfoMed is a public-health mobile web app (PWA) for **Santa Bárbara d'Oeste (SP
 - Notifications created by the server on booking and cancellation
 - Sign-up / login with LGPD (Brazilian data-protection law) consent recorded per user
 - Installable PWA, deep links and a working back button
+- Symptom triage: an on-device Naive Bayes classifier suggests the medical specialty (synthetic training data; red-flag symptoms go straight to emergency numbers; not a diagnosis)
+- Editable profile with server-side validation, and an admin-only BI dashboard with aggregated, anonymous indicators (Recharts, CSV export)
+- In-app assistant (chatbot) built as a Chain of Responsibility: emergency rules, FAQ and intents that link to app screens, all on-device with zero token cost
 
 ## Tech stack
 
@@ -37,7 +40,7 @@ src/app/
   repositories/         interfaces + implementations (mock/ and supabase/)
   features/             auth, navigation, units (+filters), scheduling, notifications, reminders
   lib/supabase.ts       Supabase client (null when .env is missing)
-db/                     numbered SQL scripts (01..07) and db/ci (CI helpers and database tests)
+db/                     numbered SQL scripts (01..09), db/ci (CI helpers and database tests) and db/demo (fictitious demo data)
 docs/                   ADRs, feature sheets, diagrams, security tests, evidence
 ```
 
@@ -80,13 +83,13 @@ Run the scripts in `db/` in order in the Supabase SQL editor: `01_schema`, `02_s
 Every push and pull request to `main` runs two jobs (`.github/workflows/ci.yml`):
 
 1. **App**: `npm ci`, type check, tests and production build.
-2. **Database**: starts PostgreSQL 16, creates stand-ins for Supabase (roles and `auth` schema), applies the migration scripts and runs `db/ci/tests.sql`, which checks row-level security, appointment rules and reminder validations.
+2. **Database**: starts PostgreSQL 16, creates stand-ins for Supabase (roles and `auth` schema), applies the migration scripts and runs `db/ci/tests.sql`, which checks row-level security, appointment rules, reminder and profile validations, and that only administrators can read the aggregated BI dashboard. It also loads and removes the demo data.
 
 Merging to `main` triggers an automatic deploy on Vercel (continuous delivery).
 
 ## Documentation
 
-All decisions are recorded in `docs/decisions` (ADR-001 to ADR-013) and each feature has a sheet in `docs/features`. Start with `docs/README.md`.
+All decisions are recorded in `docs/decisions` (ADR-001 to ADR-016) and each feature has a sheet in `docs/features`. Start with `docs/README.md`.
 
 ## Known limitations
 

@@ -24,7 +24,10 @@ export type Screen =
   | 'reminders'
   | 'create-reminder'
   | 'map-filters'
-  | 'profile';
+  | 'profile'
+  | 'triage'
+  | 'dashboard'
+  | 'assistant';
 
 // Dados que passam de uma tela para outra (ex.: o posto escolhido)
 export interface AppState {
