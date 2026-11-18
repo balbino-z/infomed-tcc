@@ -68,7 +68,7 @@ Diagrama: `docs/diagrams/arquitetura.md`.
 | App publicado | Link da Vercel: peça ao dono (é o link que vai para a banca e para a pesquisa SUS) |
 | Banco (Supabase) | **Só o dono acessa.** Prints do painel do Supabase (tabelas, políticas RLS) devem ser pedidos a ele |
 | Pipeline (CI) | Aba **Actions** do repositório no GitHub |
-| Diagramas | Os arquivos `.md` de `docs/diagrams/` usam **Mermaid**. O GitHub desenha sozinho: basta abrir o arquivo no site. Para exportar imagem: copie o bloco para https://mermaid.live e baixe PNG/SVG |
+| Diagramas | **Prontos como imagem** em `docs/diagrams/imagens/` (36 diagramas, cada um em SVG e PNG). Índice com todos visíveis: `docs/diagrams/README.md`. Para alterar um diagrama: edite o `.md` de `docs/diagrams/` e rode `node scripts/gerar-diagramas.mjs` |
 
 > **Regra de segurança:** nunca colem senhas, chaves ou o conteúdo do arquivo `.env` em documentos, prints ou chats. A chave "publishable" do Supabase é pública por natureza (vai junto com o site), mas a senha do banco e a chave `service_role` nunca.
 
@@ -236,7 +236,17 @@ Os scripts são numerados e rodados **nessa ordem** no SQL Editor do Supabase. N
 |---|---|---|
 | `decisions/ADR-001` a `ADR-016` | **Uma decisão técnica por arquivo**: contexto, decisão, alternativas, consequências | Capítulo de desenvolvimento; justificar escolhas |
 | `features/F01` a `F14` | **Uma ficha por funcionalidade**: requisito, disciplina, arquivos, como testar | Requisitos e resultados |
-| `diagrams/arquitetura.md` | Visão geral e camadas | Arquitetura |
+| `diagrams/README.md` | **Índice de todos os diagramas com as imagens** (SVG para o Word/PDF, PNG para slides em `diagrams/imagens/`) | Todo o TCC |
+| `diagrams/casos-de-uso.md` | Casos de uso (atores e funcionalidades) | Requisitos |
+| `diagrams/navegacao.md` | Mapa de telas e rotas | Desenvolvimento |
+| `diagrams/classes-dominio.md` | Classes do domínio e interfaces dos repositórios | Modelagem |
+| `diagrams/sequencias.md` | Sequências: agendar, triagem, assistente, painel de BI, lembrete | Desenvolvimento |
+| `diagrams/estados-e-atividades.md` | Estados da consulta e do lembrete; atividades de agendamento e cadastro | Modelagem |
+| `diagrams/ia-triagem.md` | Pipeline de treino e de uso da IA, com exemplo real do cálculo | IA |
+| `diagrams/bi-e-seguranca.md` | Fluxo de dados do BI, camadas de segurança, RLS, correção de privilégio | BI, Segurança |
+| `diagrams/ci-cd.md` | Pipeline de CI/CD e ciclo de uma mudança | Entrega Contínua |
+| `diagrams/iot-proposta.md` | Caixa de remédios com MQTT (**proposta, não implementada**) | IoT |
+| `diagrams/arquitetura.md` | Visão geral, camadas e implantação | Arquitetura, Nuvem |
 | `diagrams/modelo-er.md` | Modelo de dados (ER) e regras de acesso | Banco de dados |
 | `diagrams/fluxo-autenticacao.md` | Fluxo de cadastro/login com LGPD | Segurança |
 | `diagrams/padroes-de-projeto.md` | Repository, Factory, Observer, Strategy, Chain of Responsibility | Padrões de Projeto |
@@ -312,7 +322,7 @@ Cinco padrões, cada um resolvendo um problema real do app:
 | **Strategy** | Filtros e ordenações combináveis dos postos | `features/units/filters/` | 013 |
 | **Chain of Responsibility** | Chatbot em camadas: cada camada tenta responder e passa adiante | `features/assistant/` | 016 |
 
-- **Evidência:** diagramas de classe de `docs/diagrams/padroes-de-projeto.md` (exportar pelo mermaid.live), trechos de código curtos dos arquivos acima.
+- **Evidência:** imagens `padroes-de-projeto-*.svg` e `sequencias-05-*` em `docs/diagrams/imagens/`, trechos de código curtos dos arquivos acima.
 
 ### 7.3 Programação Multi Plataforma
 
@@ -332,7 +342,7 @@ Cinco padrões, cada um resolvendo um problema real do app:
 ### 7.5 Sistemas Distribuídos Aplicados a Internet das Coisas
 
 - **Situação honesta:** **não há componente de IoT implementado.** O app em si é um sistema distribuído (cliente PWA ↔ API do Supabase ↔ PostgreSQL na nuvem ↔ servidores de mapa do OpenStreetMap ↔ CDN da Vercel), e isso pode ser descrito.
-- **O que dá para escrever sem código novo:** arquitetura cliente-servidor e serviços na nuvem; comunicação via HTTPS/REST; sincronização de estado e o padrão Observer como base de sistemas orientados a eventos; uma proposta de **caixa de remédios inteligente** (sensor de abertura publicando via MQTT, alimentando os lembretes) como trabalho futuro, com diagrama.
+- **O que dá para escrever sem código novo:** arquitetura cliente-servidor e serviços na nuvem (`diagrams/arquitetura.md`, diagrama de implantação); comunicação via HTTPS/REST; sincronização de estado e o padrão Observer como base de sistemas orientados a eventos; uma proposta de **caixa de remédios inteligente** (sensor de abertura publicando via MQTT, alimentando os lembretes) como trabalho futuro, já desenhada em `diagrams/iot-proposta.md`.
 - **Se a disciplina exigir algo funcionando:** a opção planejada (prioridade baixa) é uma caixa de remédios **simulada** publicando via MQTT. Combinar com quem programa e com o professor antes; é a única disciplina sem entrega prática.
 
 ### 7.6 Computação em Nuvem

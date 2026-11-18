@@ -22,6 +22,8 @@ erDiagram
     date birth_date
     text phone
     timestamptz lgpd_consent_at
+    boolean is_admin
+    timestamptz created_at
   }
   MEDICATIONS {
     uuid id PK
@@ -40,6 +42,8 @@ erDiagram
     time opens_at
     time closes_at
     text_array services
+    text phone
+    text notes
   }
   UNIT_MEDICATIONS {
     uuid unit_id PK
@@ -64,13 +68,17 @@ erDiagram
     uuid user_id FK
     uuid doctor_id FK
     timestamptz starts_at
+    text kind
     text status
     text cancel_reason
+    timestamptz created_at
   }
   REMINDERS {
     uuid id PK
     uuid user_id FK
     uuid medication_id FK
+    text label
+    text note
     text_array times
     int_array days_of_week
     boolean active
@@ -90,7 +98,7 @@ erDiagram
 | Tabela | Leitura | Escrita |
 |---|---|---|
 | medications, health_units, unit_medications, specialties, doctors | Pública | Somente administrador (painel) |
-| profiles | Somente o próprio usuário | O próprio usuário (atualização); criação automática por gatilho no cadastro |
+| profiles | Somente o próprio usuário | O próprio usuário altera só nome, nascimento e telefone (GRANT por coluna, `08_bi.sql`); `is_admin` só pelo SQL Editor; criação automática por gatilho no cadastro |
 | appointments | Somente o próprio usuário | O próprio usuário (inserir e atualizar; sem exclusão) |
 | reminders | Somente o próprio usuário | O próprio usuário (inserir, atualizar e excluir) |
 | notifications | Somente o próprio usuário | O usuário marca como lida; criação feita pelo servidor |
@@ -99,4 +107,7 @@ erDiagram
 
 - **View `medications_with_status`**: status agregado do medicamento (disponível, estoque baixo ou indisponível) calculado a partir do estoque por unidade.
 - **Função `booked_slots(doctor, de, até)`**: devolve os horários já ocupados de um médico sem expor dados de outros usuários.
-- **Gatilho `on_auth_user_created`**: cria o perfil automaticamente quando um usuário se cadastra.
+- **Gatilho `on_auth_user_created`**: cria o perfil automaticamente quando um usuário se cadastra (com a data do aceite da LGPD, `04_auth.sql`).
+- **View `my_appointments`**: consultas do usuário com médico, especialidade e unidade (`06_agendamento.sql`).
+- **Gatilhos `appointments_validate` e `appointments_notify`**: regras do agendamento e notificações automáticas (`06_agendamento.sql`).
+- **Funções `is_admin()` e `bi_dashboard(p_days)`**: painel de BI, só administrador e só dados agregados (`08_bi.sql`).

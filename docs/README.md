@@ -6,7 +6,7 @@ Esta pasta reúne o material que alimenta o texto final do TCC. **Comece por [`G
 |---|---|
 | `decisions/` | ADRs: uma decisão técnica por arquivo (contexto, decisão, alternativas, consequências) |
 | `features/` | Uma ficha por funcionalidade concluída (modelo em `features/_modelo.md`) |
-| `diagrams/` | Diagramas em Mermaid (arquitetura, modelo ER, classes, fluxos) |
+| `diagrams/` | 36 diagramas (casos de uso, arquitetura, ER, classes, sequências, estados, padrões, IA, BI, segurança, CI/CD, IoT). **Imagens prontas em `diagrams/imagens/`**; índice em `diagrams/README.md` |
 | `data/` | Fontes e decisões sobre os dados reais das unidades de saúde |
 | `security/` | Controles de segurança e casos de teste (RLS, LGPD) |
 | `evidence/` | Prints de telas, pipeline verde, políticas de RLS, dashboard, pesquisa de usabilidade |
