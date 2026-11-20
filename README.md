@@ -80,12 +80,61 @@ Run the scripts in `db/` in order in the Supabase SQL editor: `01_schema`, `02_s
 
 ## Continuous integration
 
-Every push and pull request to `main` runs two jobs (`.github/workflows/ci.yml`):
+Every push and pull request to `main` or `develop` runs two jobs (`.github/workflows/ci.yml`):
 
 1. **App**: `npm ci`, type check, tests and production build.
 2. **Database**: starts PostgreSQL 16, creates stand-ins for Supabase (roles and `auth` schema), applies the migration scripts and runs `db/ci/tests.sql`, which checks row-level security, appointment rules, reminder and profile validations, and that only administrators can read the aggregated BI dashboard. It also loads and removes the demo data.
 
 Merging to `main` triggers an automatic deploy on Vercel (continuous delivery).
+
+## Esteira DevOps e deploy (pt-BR)
+
+> Manual completo, com todos os comandos por etapa: [`docs/devops/MANUAL-DEVOPS.md`](docs/devops/MANUAL-DEVOPS.md).
+
+### Branches
+
+| Branch | Função | Deploy automático na Vercel |
+|---|---|---|
+| `main` | Produção (só recebe PR aprovado de `develop` ou `hotfix/*`) | Produção |
+| `develop` | Homologação (recebe PR aprovado das tarefas) | Homologação |
+| `feature/*`, `fix/*`, `docs/*` | Uma tarefa por branch, sai de `develop` | Preview (modo Mock) |
+| `hotfix/*` | Correção urgente, sai de `main` | Preview |
+
+Regras: nenhum push direto em `main`/`develop`; todo PR precisa de CI verde (jobs App e Database) e 1 aprovação de outro integrante.
+
+### Fluxo de uma tarefa
+
+```bash
+git checkout develop && git pull origin develop
+git checkout -b feature/nome-da-tarefa
+npm ci
+npm run dev                     # desenvolver em http://localhost:5173
+npm run typecheck && npm test && npm run build
+git add -A && git commit -m "feat: descreve a mudança"
+git push -u origin feature/nome-da-tarefa
+# GitHub: Pull request para develop → CI + link de Preview → revisão do colega → Squash and merge
+```
+
+### Release e deploy em produção
+
+```bash
+# GitHub: Pull request develop → main → CI verde + aprovação → Merge
+git checkout main && git pull origin main
+git tag -a v1.1.0 -m "v1.1.0"
+git push origin v1.1.0          # GitHub → Releases → publicar a versão
+```
+
+O merge em `main` dispara o deploy de produção na Vercel (`npm ci` → `npm run build` → publica `dist/`). Scripts SQL novos (`db/NN_*.sql`) são aplicados pelo dono no SQL Editor do Supabase, na ordem, depois do merge. Deploy manual alternativo: `npx vercel --prod`. Rollback: Vercel → Deployments → *Promote to Production* no deploy anterior.
+
+### Ambientes
+
+| Ambiente | Origem | Dados |
+|---|---|---|
+| Local | `npm run dev` | Mock (sem `.env`) ou Supabase (com `.env`) |
+| CI | GitHub Actions | PostgreSQL 16 temporário |
+| Preview | Vercel, por PR | Mock |
+| Homologação | Vercel, branch `develop` | Supabase |
+| Produção | Vercel, branch `main` | Supabase |
 
 ## Documentation
 

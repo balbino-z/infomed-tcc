@@ -1,10 +1,13 @@
 name: CI
 
+# Esteira: roda em todo push e pull request das branches de longa duração.
+# main = produção, develop = homologação; feature/* e hotfix/* entram por pull request.
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+  workflow_dispatch: # permite rodar manualmente pela aba Actions
 
 # Cancela a execução anterior da mesma branch quando chega um commit novo
 concurrency:
