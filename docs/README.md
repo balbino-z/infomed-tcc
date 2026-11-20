@@ -8,7 +8,7 @@ Esta pasta reúne o material que alimenta o texto final do TCC. **Comece por [`G
 | `features/` | Uma ficha por funcionalidade concluída (modelo em `features/_modelo.md`) |
 | `diagrams/` | 36 diagramas (casos de uso, arquitetura, ER, classes, sequências, estados, padrões, IA, BI, segurança, CI/CD, IoT). **Imagens prontas em `diagrams/imagens/`**; índice em `diagrams/README.md` |
 | `data/` | Fontes e decisões sobre os dados reais das unidades de saúde |
-| `security/` | Controles de segurança e casos de teste (RLS, LGPD) |
+| `security/` | Controles de segurança e casos de teste (RLS, LGPD) e o **Relatório de Segurança** (`RELATORIO-DE-SEGURANCA.md` e versão Word em formato ABNT) |
 | `evidence/` | Prints de telas, pipeline verde, políticas de RLS, dashboard, pesquisa de usabilidade |
 | `ml/` | Avaliação do modelo de IA da triagem (gerada por `scripts/treinar-triagem.mjs`) |
 
