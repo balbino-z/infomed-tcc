@@ -366,9 +366,8 @@ git push origin develop
 
 | Integrante | Usuário GitHub | Papel na esteira | Atividades |
 |---|---|---|---|
-| (nome) | `balbino-z` | Dono do repositório e desenvolvedor | Configurou GitHub Actions, Vercel, Supabase e as regras de branch; desenvolveu as tarefas de código; abriu PRs; revisou os PRs de documentação; fez as releases e tags; rodou os SQL em produção |
-| (nome) | (usuário) | Documentação e revisor | Escreveu a documentação do TCC em branches `docs/*`; **revisou e aprovou os PRs de código** testando o link de Preview |
-| (nome) | (usuário) | (preencher) | (preencher) |
+| Vinícius Balbino | `balbino-z` | Dono do repositório e desenvolvedor | Configurou GitHub Actions, rulesets, Vercel e Supabase; desenvolveu o código; abriu PRs; revisou e aprovou os PRs do Pablo; fez a release e a tag |
+| Pablo Furtado Casagrande | `Pablo-Casagrande` | Revisor e documentação | Desenvolveu as tarefas de documentação; abriu PRs; revisou e aprovou os PRs do Balbino testando o link de Preview; registrou as evidências |
 
 ### Registro de pull requests
 
