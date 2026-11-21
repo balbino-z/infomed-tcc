@@ -6,3 +6,8 @@ dist
 # Anotações locais com senhas (nunca versionar)
 docs/senha*
 *senha*.md
+
+# Caixa de remédios: config com chave e pareamento do simulador (gerados localmente)
+firmware/caixa-infomed/config.h
+.caixa-simulada.json
+firmware/**/senha_wifi.h

@@ -6,9 +6,10 @@ export interface Reminder {
   daysOfWeek: number[];        // 0 = domingo ... 6 = sábado
   note: string | null;
   active: boolean;
+  createdAt?: string;          // ISO; a adesão não cobra doses de antes do lembrete existir
 }
 
-export type NewReminder = Omit<Reminder, 'id' | 'active'> & { active?: boolean };
+export type NewReminder = Omit<Reminder, 'id' | 'active' | 'createdAt'> & { active?: boolean };
 
 export const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6];
 export const WEEKDAYS_ONLY = [1, 2, 3, 4, 5];

@@ -10,7 +10,7 @@ export class MockReminderRepository implements ReminderRepository {
     return [...items];
   }
   async create(input: NewReminder) {
-    const r: Reminder = { id: `r${++seq}`, active: true, ...input };
+    const r: Reminder = { id: `r${++seq}`, active: true, createdAt: new Date().toISOString(), ...input };
     items.push(r);
     emitRemindersChanged();
     return r;

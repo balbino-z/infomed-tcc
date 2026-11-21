@@ -1,9 +1,11 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
-import { Mail, Phone, Calendar, Bell, Lock, HelpCircle, LogOut, ChevronRight, Pencil, X, ShieldCheck, BarChart3 } from 'lucide-react';
+import { Mail, Phone, Calendar, Bell, Lock, HelpCircle, LogOut, ChevronRight, Pencil, X, ShieldCheck, BarChart3, Package } from 'lucide-react';
 import type { Screen, AppState } from '../../App';
 import type { UserProfile } from '../../domain/profile';
+import { adherenceRate, type AdherenceSummary } from '../../domain/adherence';
 import { useAuth } from '../../features/auth/AuthContext';
-import { appointmentRepository, profileRepository, reminderRepository } from '../../repositories';
+import { adherenceRepository, appointmentRepository, profileRepository, reminderRepository } from '../../repositories';
+import { bus } from '../../features/notifications/NotificationBus';
 import { formatDateBR, formatPhone, validateProfile, type ProfileErrors } from '../../features/profile/profileUtils';
 import { isoDateSP } from '../../features/scheduling/dateUtils';
 import { Header } from '../shared/Header';
@@ -31,6 +33,16 @@ export function Profile({ navigate }: ProfileProps) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [panel, setPanel] = useState<InfoPanel>(null);
+  const [adherence, setAdherence] = useState<AdherenceSummary | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    const loadAdherence = () => adherenceRepository.summary(30).then((s) => active && setAdherence(s)).catch(() => {});
+    void loadAdherence();
+    const off = bus.on('doses-changed', () => void loadAdherence());
+    return () => { active = false; off(); };
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user) return;
@@ -108,6 +120,8 @@ export function Profile({ navigate }: ProfileProps) {
           </div>
         </div>
 
+        {adherence && <AdherenceCard summary={adherence} />}
+
         {error && !editing && <p role="alert" className="mb-4 rounded-xl bg-[#FF4D5E]/10 p-3 text-sm text-[#C6283A]">{error}</p>}
         {success && <p role="status" className="mb-4 rounded-xl bg-[#27C183]/10 p-3 text-sm text-[#16784B]">{success}</p>}
 
@@ -165,6 +179,7 @@ export function Profile({ navigate }: ProfileProps) {
         )}
 
         <section className="mb-4 overflow-hidden rounded-2xl border border-[#E8F1FF] bg-white">
+          <MenuButton icon={<Package />} label="Minha caixa de remédios" hint="Parear, status e temperatura" color="#0A73FF" onClick={() => navigate('medicine-box')} />
           <MenuButton icon={<Bell />} label="Notificações" color="#FFCC48" onClick={() => navigate('notifications')} />
           <MenuButton icon={<Lock />} label="Privacidade e Segurança" color="#FF4D5E" onClick={() => setPanel('privacy')} />
           <MenuButton icon={<HelpCircle />} label="Ajuda e Suporte" color="#27C183" onClick={() => setPanel('help')} last />
@@ -209,6 +224,38 @@ export function Profile({ navigate }: ProfileProps) {
       )}
       <BottomNav active="profile" onNavigate={navigate} />
     </div>
+  );
+}
+
+/** "Adesão nos últimos 30 dias: 86%" + barras dos últimos 14 dias. */
+function AdherenceCard({ summary }: { summary: AdherenceSummary }) {
+  const rate = adherenceRate(summary.taken, summary.expected);
+  const days = summary.byDay.slice(-14);
+  const color = rate === null ? '#CED6E0' : rate >= 80 ? '#27C183' : rate >= 50 ? '#FFB020' : '#FF4D5E';
+  return (
+    <section className="mb-4 rounded-2xl border border-[#E8F1FF] bg-white p-5" aria-label="Adesão ao tratamento">
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <p className="text-sm text-[#64748B]">Adesão nos últimos {summary.days} dias</p>
+          <p className="text-3xl text-[#1A2B48]" data-testid="adherence-rate">{rate === null ? '—' : `${rate}%`}</p>
+        </div>
+        {days.length > 0 && (
+          <div className="flex h-10 items-end gap-[3px]" aria-hidden="true">
+            {days.map((d) => (
+              <span key={d.day} className="w-[6px] rounded-sm" style={{ height: `${Math.max(8, (d.taken / d.expected) * 100)}%`, backgroundColor: d.taken === d.expected ? '#27C183' : d.taken === 0 ? '#FF4D5E' : '#FFB020' }} />
+            ))}
+          </div>
+        )}
+      </div>
+      <p className="mt-1 text-xs text-[#64748B]">
+        {summary.expected === 0
+          ? 'Ainda não há doses previstas. Crie lembretes e confirme as doses pela caixa ou pelo botão “Tomei”.'
+          : `${summary.taken} de ${summary.expected} doses tomadas · ${summary.late} com atraso · ${summary.missed} esquecidas`}
+      </p>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#F7FAFF]">
+        <div className="h-full rounded-full" style={{ width: `${rate ?? 0}%`, backgroundColor: color }} />
+      </div>
+    </section>
   );
 }
 

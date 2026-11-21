@@ -9,11 +9,15 @@ export interface DueReminder {
   label: string;
   time: string; // 'HH:MM'
   note: string | null;
+  /** 'due' = hora do remédio; 'check' = 30 min depois, sem registro: "Você tomou?" */
+  kind?: 'due' | 'check';
+  scheduledAt?: string; // ISO do horário previsto (para o botão "Tomei")
 }
 
 type Events = {
   'notifications-changed': undefined;
   'reminders-changed': undefined;
+  'doses-changed': undefined; // dose marcada como tomada (caixa ou botão "Tomei")
   'reminder-due': DueReminder;
 };
 
@@ -36,3 +40,4 @@ export class EventBus<E extends Record<string, unknown>> {
 export const bus = new EventBus<Events>();
 export const emitNotificationsChanged = () => bus.emit('notifications-changed', undefined);
 export const emitRemindersChanged = () => bus.emit('reminders-changed', undefined);
+export const emitDosesChanged = () => bus.emit('doses-changed', undefined);

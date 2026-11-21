@@ -24,6 +24,7 @@ import { CreateReminder } from '../../components/screens/CreateReminder';
 import { Profile } from '../../components/screens/Profile';
 import { Triage } from '../../components/screens/Triage';
 import { Assistant } from '../../components/screens/Assistant';
+import { MedicineBox } from '../../components/screens/MedicineBox';
 
 // Painel de BI (Recharts) só é baixado quando o administrador abre a tela
 const Dashboard = lazy(() => import('../../components/screens/Dashboard'));
@@ -127,6 +128,7 @@ export function AppRoutes() {
       <Route path="/lembretes" element={priv(<RemindersList navigate={navigate} />)} />
       <Route path="/lembretes/novo" element={priv(<CreateReminder navigate={navigate} medication={data.selectedMedication} />)} />
       <Route path="/perfil" element={priv(<Profile navigate={navigate} />)} />
+      <Route path="/perfil/caixa" element={priv(<MedicineBox navigate={navigate} />)} />
       <Route path="/triagem" element={priv(<Triage navigate={navigate} />)} />
       <Route path="/assistente" element={priv(<Assistant navigate={navigate} />)} />
       <Route path="/painel" element={priv(<Suspense fallback={<Loading />}><Dashboard navigate={navigate} /></Suspense>)} />
