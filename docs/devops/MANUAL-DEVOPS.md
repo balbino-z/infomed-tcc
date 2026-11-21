@@ -373,9 +373,13 @@ git push origin develop
 
 | PR | Branch → destino | Tarefa | Desenvolveu | Abriu o PR | Revisou e aprovou | Data | Resultado |
 |---|---|---|---|---|---|---|---|
-| #1 | `feature/esteira-devops` → `develop` | Esteira DevOps (CI em develop, modelo de PR, manual) | (nome) | (nome) | (nome do colega) | | |
-| #2 | `develop` → `main` | Release v1.1.0 | — | (nome) | (nome do colega) | | |
-| | | | | | | | |
+| #1–#6 | várias → `main` / `develop` | Antes da esteira (esteira, relatório de segurança, remoção dos zips, caixa de remédios, release sem tag) | Balbino | Balbino | — (só o robô Qodo) | 20–21/11/2026 | Mesclados antes das regras de proteção |
+| #7 | `docs/evidencias-devops-balbino` → `develop` | Evidências da configuração da esteira (rulesets, Vercel, Supabase) | Balbino | Balbino | Pablo | 21/11/2026 | Mesclado por Balbino |
+| #8 | `docs/papeis-do-grupo` → `develop` | Papéis da dupla (Rodada 1) | Pablo | Pablo | Balbino | 21/11/2026 | Mesclado por Balbino |
+| #9 | `fix/cabecalhos-seguranca` → `develop` | Cabeçalhos de segurança HTTP – achado V04 (Rodada 2) | Balbino | Balbino | Pablo (testou os cabeçalhos na Preview) | 21/11/2026 | Mesclado por Balbino (squash) |
+| #10 | `test/demonstra-ci-vermelho` → `develop` | Demonstração do CI barrando teste quebrado (Rodada 3) | Pablo | Pablo | — | 21/11/2026 | Fechado sem merge (CI barrou; depois verde) |
+| #11 | `develop` → `main` | Release v1.1.0 | — | Balbino | Pablo (testou a homologação) | 21/11/2026 | Mesclado (merge commit) + tag `v1.1.0` + Release no GitHub |
+| #12 | `docs/evidencias-devops` → `develop` | Evidências e registro da esteira | Pablo | Pablo | Balbino | 21/11/2026 | (este PR) |
 
 ### Histórico antes da esteira (declarar com transparência)
 

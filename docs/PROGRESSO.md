@@ -149,4 +149,10 @@
 **Próximo passo sugerido:** rodar os SQL, testar no celular, prints; depois T13.
 **Docs atualizados:** ADR-014, ADR-015, ADR-016 / F12, F13, F14 / `docs/ml/avaliacao-triagem.md`, `diagrams/padroes-de-projeto.md`, README, CONTEXTO-IA
 
-### Sessão 12 — (a preencher) — (nome)
+### Sessão 12 — 21/11/2026 — Vinícius Balbino e Pablo Furtado Casagrande
+**Tarefa:** esteira DevOps (Programação Multiplataforma), seguindo `docs/devops/PASSO-A-PASSO-DUPLA.md`.
+**Feito:** rulesets `protege-main` e `protege-develop` (PR obrigatório + 1 aprovação + checks App e Database, sem bypass); ambientes na Vercel (produção = `main`, homologação = `develop`, preview = PRs em Mock); Redirect URLs no Supabase; rodadas de PR com revisão cruzada (#7 e #9 do Balbino aprovados pelo Pablo; #8 do Pablo aprovado pelo Balbino); cabeçalhos de segurança HTTP no `vercel.json` (V04 parcial, falta CSP); demonstração do CI barrando teste quebrado (#10, fechado sem merge); release v1.1.0 (#11) com tag e Release no GitHub. Os PRs #1 a #6 ficam registrados como "antes da esteira".
+**Problemas e soluções:** o e-mail do Git do Pablo tinha um caractere invisível (U+0096) e o commit do #8 não aparecia vinculado à conta; corrigido com `git config --global user.email` + `git commit --amend --reset-author` + `git push --force-with-lease`.
+**Evidências:** `docs/evidence/devops/` (B* = Balbino, P* = Pablo); prints de navegador tirados com o Playwright CLI (`@playwright/cli`); registro de PRs em `docs/devops/MANUAL-DEVOPS.md`, seção 9.
+**Pendências:** Content-Security-Policy (V04); prints de terminal e Vercel que dependem de cada um (P02, B10, B11, B13).
+**Próximo passo sugerido:** release `develop → main` (v1.1.1) para levar estas evidências à `main`; ensaiar o roteiro da Etapa 9.

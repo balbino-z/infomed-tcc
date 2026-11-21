@@ -1,0 +1,28 @@
+PR #9 - Preview: https://infomed-tcc-git-fix-cabecalho-30106c-vinicius-balbinos-projects.vercel.app/
+Cabecalhos da resposta do documento (capturados pelo navegador do Playwright CLI em 21/11/2026 21:29 UTC):
+
+access-control-allow-origin: *
+age: 95
+cache-control: public, max-age=0, must-revalidate
+content-disposition: inline
+content-encoding: br
+content-type: text/html; charset=utf-8
+date: Sat, 21 Nov 2026 21:29:37 GMT
+etag: W/"cc7fa6ad098aef5faa9698c867860f3a"
+last-modified: Sat, 21 Nov 2026 21:28:02 GMT
+permissions-policy: geolocation=(self), camera=(), microphone=(), payment=(), usb=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-robots-tag: noindex
+x-vercel-cache: HIT
+x-vercel-id: gru1::ms2tz-1795296577821-beeb3ff07d8d
+
+Conferencia com curl -I em https://infomed-tcc-git-fix-cabecalho-30106c-vinicius-balbinos-projects.vercel.app/postos (rota interna):
+HTTP/1.1 200 OK
+Permissions-Policy: geolocation=(self), camera=(), microphone=(), payment=(), usb=()
+Referrer-Policy: strict-origin-when-cross-origin
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
