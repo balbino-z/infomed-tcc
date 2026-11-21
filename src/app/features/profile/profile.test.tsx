@@ -43,7 +43,7 @@ beforeEach(() => {
 
 describe('profileUtils', () => {
   it('formata telefone fixo, celular e digitação parcial', () => {
-    expect(formatPhone('19999998888')).toBe('(19) 0000-0000');
+    expect(formatPhone('19999998888')).toBe('(19) 99999-8888');
     expect(formatPhone('1934567890')).toBe('(19) 3456-7890');
     expect(formatPhone('199')).toBe('(19) 9');
     expect(formatPhone('')).toBe('');
