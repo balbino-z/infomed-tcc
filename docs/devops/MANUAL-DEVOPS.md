@@ -2,6 +2,7 @@
 
 > Disciplina: Programação Multiplataforma (e Integração e Entrega Contínua).
 > Este manual descreve **como o código sai da máquina do desenvolvedor e chega ao celular do usuário**, com os comandos usados em cada etapa, as branches, os ambientes e quem faz o quê.
+> **Para executar a esteira do zero, passo a passo e com os prints:** [`PASSO-A-PASSO-DUPLA.md`](PASSO-A-PASSO-DUPLA.md).
 
 ## Sumário
 
