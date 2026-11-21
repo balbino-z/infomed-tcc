@@ -3,10 +3,10 @@ import type { NewReminder, Reminder } from '../../domain/reminder';
 import type { ReminderRepository } from '../ReminderRepository';
 import { emitRemindersChanged } from '../../features/notifications/NotificationBus';
 
-interface Row { id: string; label: string | null; medication_id: string | null; times: string[]; days_of_week: number[]; note: string | null; active: boolean }
+interface Row { id: string; label: string | null; medication_id: string | null; times: string[]; days_of_week: number[]; note: string | null; active: boolean; created_at?: string }
 
 const toDomain = (r: Row): Reminder => ({
-  id: r.id, label: r.label ?? '', medicationId: r.medication_id, times: r.times, daysOfWeek: r.days_of_week, note: r.note, active: r.active,
+  id: r.id, label: r.label ?? '', medicationId: r.medication_id, times: r.times, daysOfWeek: r.days_of_week, note: r.note, active: r.active, createdAt: r.created_at,
 });
 
 export class SupabaseReminderRepository implements ReminderRepository {

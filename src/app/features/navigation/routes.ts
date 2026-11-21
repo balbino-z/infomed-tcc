@@ -28,6 +28,7 @@ export const SCREEN_PATH: Record<Screen, string> = {
   triage: '/triagem',
   dashboard: '/painel',
   assistant: '/assistente',
+  'medicine-box': '/perfil/caixa',
 };
 
 /** Monta a URL de uma tela, usando o item escolhido quando a rota tem ":id". */
