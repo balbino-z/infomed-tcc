@@ -146,7 +146,7 @@ Repita tudo criando outro ruleset chamado `protege-develop`, com o padrão `deve
 📸 **B03-ruleset-main.png** — a tela do `protege-main` mostrando as opções marcadas (role a página e tire 2 prints se precisar: `B03a`, `B03b`).
 
 ### 2.4 Configurar os ambientes na Vercel
-> ✅ **Feito em 21/11/2026** (com o Playwright CLI, na conta do BALBINO), exceto o item 2, que fica com o BALBINO.
+> ✅ **Feito em 21/11/2026** (com o Playwright CLI, na conta do BALBINO). O item 2 foi feito pelo BALBINO, porque a Vercel pede código por e-mail.
 
 Endereços dos ambientes:
 - **Produção** (`main`): https://infomed-tcc.vercel.app
@@ -154,8 +154,8 @@ Endereços dos ambientes:
 - **Preview** (cada PR): o link que a Vercel comenta no PR.
 
 1. **Settings → Environments:** a linha *Production* mostra *Branch Tracking* = `main`. ✅
-2. **Settings → Environment Variables (pendente, BALBINO faz):** as duas variáveis do app (`VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`) estão só em **Production**. Para a homologação usar o banco: **⋯ → Edit** em cada uma → a Vercel manda um **código de 6 dígitos para o seu e-mail** → digite o código → em *Environments* clique **Select a Custom Preview Branch** → escolha `develop` → **Save**. Depois, em **Deployments**, abra o último deploy da `develop` → **⋯ → Redeploy**.
-   - Enquanto isso não for feito, a homologação roda em **modo Mock** (sem banco). Isso não impede a esteira; só registre no trabalho.
+2. **Settings → Environment Variables (✅ feito pelo BALBINO):** resultado final: cada variável `VITE_...` aparece duas vezes, uma em *Production* e outra em *Preview · develop*. **Atenção:** ao editar, a Vercel **troca** o ambiente em vez de acrescentar; para ter os dois, crie uma entrada para cada ambiente. as duas variáveis do app (`VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`) estão só em **Production**. Para a homologação usar o banco: **⋯ → Edit** em cada uma → a Vercel manda um **código de 6 dígitos para o seu e-mail** → digite o código → em *Environments* clique **Select a Custom Preview Branch** → escolha `develop` → **Save**. Depois, em **Deployments**, abra o último deploy da `develop` → **⋯ → Redeploy**.
+   - Depois do **Redeploy** da `develop`, a homologação passou a usar o Supabase (conferido em 21/11/2026).
 3. **Settings → Deployment Protection:** *Vercel Authentication* foi **desligado**, para o PABLO abrir os links de Preview e a homologação sem conta na Vercel. ✅ Não expõe dados: as previews rodam em modo Mock.
 
 📸 **B04-vercel-ambientes.png** — Production acompanhando a `main`. ✅
