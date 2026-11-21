@@ -203,7 +203,7 @@ Quadro 3 – Controles do InfoMed por categoria do OWASP Top 10:2021
 | A02 Falhas criptográficas | Atendido | HTTPS em todo o tráfego; senhas com *hash* no Supabase Auth |
 | A03 Injeção | Atendido | Acesso pela API do Supabase com parâmetros, sem montagem de SQL no cliente; React escapa o conteúdo exibido |
 | A04 Design inseguro | Atendido | Modelagem STRIDE, regras duplicadas no banco, triagem local |
-| A05 Configuração incorreta | Parcial | Faltam cabeçalhos de segurança HTTP (V04); confirmação de e-mail desligada (V05) |
+| A05 Configuração incorreta | Parcial | Cabeçalhos de segurança HTTP aplicados, exceto a CSP (V04); confirmação de e-mail desligada (V05) |
 | A06 Componentes vulneráveis | Parcial | 0 vulnerabilidades em dependências de produção; 9 em dependências de desenvolvimento (V03) |
 | A07 Falhas de identificação e autenticação | Atendido | Supabase Auth, senha mínima de 8, mensagens genéricas |
 | A08 Falhas de integridade de software e dados | Atendido | `npm ci` com lockfile, CI obrigatório, revisão de PR |
@@ -271,7 +271,7 @@ Quadro 6 – Achados de segurança
 | V01 | Escalada de privilégio: o usuário podia alterar qualquer coluna do próprio perfil, inclusive o papel de administrador e a data do aceite da LGPD | Alta | **Corrigido** | `db/08_bi.sql` restringiu o `GRANT UPDATE` a nome, nascimento e telefone; teste automatizado e mutação comprovam |
 | V02 | Senha do banco de dados versionada no repositório | Alta | **Parcial** | Arquivo removido do versionamento e ignorado; falta trocar a senha no Supabase, pois ela permanece no histórico |
 | V03 | Nove vulnerabilidades em dependências de desenvolvimento (2 críticas) | Média | Aberto | Atualizar `vitest`, `vite` e `vite-plugin-pwa` dentro das versões compatíveis e repetir os testes |
-| V04 | Ausência de cabeçalhos de segurança HTTP (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) | Média | Aberto | Definir os cabeçalhos em `vercel.json`, liberando apenas Supabase e OpenStreetMap na CSP |
+| V04 | Ausência de cabeçalhos de segurança HTTP (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) | Média | **Parcial** | `vercel.json` passou a enviar X-Content-Type-Options, X-Frame-Options, Referrer-Policy e Permissions-Policy (só geolocalização liberada); falta a Content-Security-Policy, liberando apenas Supabase e OpenStreetMap |
 | V05 | Confirmação de e-mail desativada no Supabase | Média | Aceito (demonstração) | Reativar antes de uso real, para impedir cadastro com e-mail de terceiros |
 | V06 | Direitos do titular incompletos: não há exclusão de conta nem exportação de dados pelo app; não há política de privacidade publicada | Média | Aberto | Funções de exclusão e exportação; publicar política (minuta no Apêndice B) |
 | V07 | Homologação e produção compartilham o mesmo banco de dados | Média | Aberto | Criar um segundo projeto Supabase para homologação |
@@ -337,7 +337,7 @@ Quadro 9 – Matriz de riscos dos achados abertos (P = probabilidade, I = impact
 |---|---|---|---|---|
 | V02 | 2 | 3 | 6 | Alto |
 | V03 | 1 | 3 | 3 | Médio |
-| V04 | 2 | 2 | 4 | Médio |
+| V04 | 1 | 2 | 2 | Baixo |
 | V05 | 2 | 2 | 4 | Médio |
 | V06 | 2 | 2 | 4 | Médio |
 | V07 | 2 | 2 | 4 | Médio |
@@ -356,7 +356,7 @@ Quadro 10 – Plano de ação priorizado
 |---|---|---|---|
 | 1 | Trocar a senha do banco no Supabase | V02 | 5 minutos |
 | 2 | Atualizar dependências de desenvolvimento e repetir os testes | V03 | 1 hora |
-| 3 | Adicionar cabeçalhos de segurança no `vercel.json` | V04 | 1 hora |
+| 3 | Adicionar a Content-Security-Policy no `vercel.json` (demais cabeçalhos já aplicados) | V04 | 1 hora |
 | 4 | Publicar política de privacidade e criar exclusão e exportação de dados | V06 | 1 a 2 dias |
 | 5 | Reativar a confirmação de e-mail para uso real | V05 | 5 minutos |
 | 6 | Separar o banco de homologação | V07 | 2 horas |

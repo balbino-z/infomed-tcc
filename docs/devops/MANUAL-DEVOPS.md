@@ -345,12 +345,12 @@ git push origin develop
 > Observação: em repositório **privado** de conta gratuita, o GitHub pode não aplicar as regras de proteção. Nesse caso, deixar o repositório **público** (não há segredos nele: a chave `publishable` do Supabase é pública por natureza e o `.env` não é versionado) ou combinar no grupo e mostrar a regra configurada no print.
 
 ### Vercel: branches e ambientes
-1. **Settings → Git → Production Branch:** `main`.
+1. **Settings → Environments:** *Production* com *Branch Tracking* = `main`.
 2. **Settings → Environment Variables:**
    - `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` com escopo **Production**.
    - As mesmas duas com escopo **Preview** e **Branch: `develop`** (só homologação usa o banco).
    - Nada para as outras previews → elas rodam em Mock.
-3. **Settings → Domains → Add:** um domínio para homologação (ex.: `infomed-hml.vercel.app`, se estiver livre) → em *Git Branch*, escolher `develop`.
+3. **Homologação:** usar o endereço fixo que a Vercel cria para a branch `develop`: https://infomed-tcc-git-develop-vinicius-balbinos-projects.vercel.app (produção: https://infomed-tcc.vercel.app).
 4. **Settings → Deployment Protection:** se as previews pedirem login da Vercel, desligar *Vercel Authentication* para *Preview* ou adicionar os colegas no time, para os revisores conseguirem abrir o link.
 
 ### Supabase: liberar os endereços dos ambientes
@@ -366,9 +366,8 @@ git push origin develop
 
 | Integrante | Usuário GitHub | Papel na esteira | Atividades |
 |---|---|---|---|
-| (nome) | `balbino-z` | Dono do repositório e desenvolvedor | Configurou GitHub Actions, Vercel, Supabase e as regras de branch; desenvolveu as tarefas de código; abriu PRs; revisou os PRs de documentação; fez as releases e tags; rodou os SQL em produção |
-| (nome) | (usuário) | Documentação e revisor | Escreveu a documentação do TCC em branches `docs/*`; **revisou e aprovou os PRs de código** testando o link de Preview |
-| (nome) | (usuário) | (preencher) | (preencher) |
+| Vinícius Balbino | `balbino-z` | Dono do repositório e desenvolvedor | Configurou GitHub Actions, rulesets, Vercel e Supabase; desenvolveu o código; abriu PRs; revisou e aprovou os PRs do Pablo; fez a release e a tag |
+| Pablo Furtado Casagrande | `Pablo-Casagrande` | Revisor e documentação | Desenvolveu as tarefas de documentação; abriu PRs; revisou e aprovou os PRs do Balbino testando o link de Preview; registrou as evidências |
 
 ### Registro de pull requests
 

@@ -36,7 +36,7 @@
 
 **A regra de ouro da esteira:** ninguém mexe direto na `main` nem na `develop`. Tudo entra por PR, com o CI (testes automáticos) verde e a aprovação do **outro** integrante.
 
-**Sobre o que já foi feito:** os PRs #1, #2 e #3 foram abertos e mesclados pela mesma pessoa, direto na `main`, sem revisão. Eles ficam no histórico como **"antes da esteira"**. A esteira válida começa no PR #4, nesta sequência.
+**Sobre o que já foi feito:** os PRs #1 a #6 foram abertos e mesclados pela mesma pessoa, sem revisão humana (só a de um robô, o Qodo). Eles ficam no histórico como **"antes da esteira"**. A esteira válida começa no próximo PR (#7 em diante), nesta sequência.
 
 ---
 
@@ -97,11 +97,15 @@ git config --global user.email "email-da-sua-conta-github"
 ## Etapa 2 – Configurar GitHub, Vercel e Supabase (BALBINO)
 
 ### 2.1 Conferir o colaborador
+> ✅ **Feito em 21/11/2026.** O Pablo já é colaborador. Print: **B01-colaboradores.png** ✅
+
 github.com/balbino-z/infomed-tcc → **Settings → Collaborators**. O `Pablo-Casagrande` já aparece. Se aparecer "Pending", o PABLO precisa aceitar o convite no e-mail ou em github.com/notifications.
 
 📸 **B01-colaboradores.png** — a tela de Collaborators com os dois nomes.
 
 ### 2.2 Atualizar a `develop`
+> ✅ **Feito em 21/11/2026.**
+
 A `develop` ficou para trás da `main`. No terminal do VS Code, dentro da pasta `C:\projetos\InfoMed`:
 ```bash
 git checkout develop
@@ -118,6 +122,8 @@ git push origin develop
 ✅ Deu certo se o último comando terminar com algo como `develop -> develop`.
 
 ### 2.3 Proteger a `main` e a `develop` (a parte mais importante)
+> ✅ **Feito em 21/11/2026** (rulesets `protege-main` e `protege-develop`). Prints: **B02-rulesets.png**, **B03-ruleset-main.png** e **B03b-ruleset-main-detalhes.png** (1 aprovação e os 2 checks) ✅
+
 github.com/balbino-z/infomed-tcc → **Settings → Rules → Rulesets → New ruleset → New branch ruleset**.
 
 Preencha:
@@ -140,21 +146,28 @@ Repita tudo criando outro ruleset chamado `protege-develop`, com o padrão `deve
 📸 **B03-ruleset-main.png** — a tela do `protege-main` mostrando as opções marcadas (role a página e tire 2 prints se precisar: `B03a`, `B03b`).
 
 ### 2.4 Configurar os ambientes na Vercel
-vercel.com → abra o projeto do InfoMed.
+> ✅ **Feito em 21/11/2026** (com o Playwright CLI, na conta do BALBINO). O item 2 foi feito pelo BALBINO, porque a Vercel pede código por e-mail.
 
-1. **Settings → Git → Production Branch:** `main` → **Save**.
-2. **Settings → Environment Variables:** as duas variáveis (`VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`) devem existir para **Production**. Clique nos três pontinhos de cada uma → **Edit** → em *Environments* marque também **Preview** e, no campo de branch, escolha **develop** → **Save**.
-   - Resultado: produção e homologação usam o banco; as previews de PR rodam em modo Mock, sem tocar em dados reais.
-3. **Settings → Domains → Add:** digite um nome livre, por exemplo `infomed-hml.vercel.app` (se estiver ocupado, tente outro) → depois de adicionar, clique em **Edit** no domínio e, em **Git Branch**, escolha `develop` → **Save**. Esse passa a ser o endereço de **homologação**.
-4. **Settings → Deployment Protection:** se *Vercel Authentication* estiver ligado, **desligue** (deixe *Disabled*) e salve. Sem isso, o PABLO precisaria de conta na Vercel para abrir os links de Preview.
-5. Anote os dois endereços: **produção** (o domínio principal) e **homologação** (o que você criou).
+Endereços dos ambientes:
+- **Produção** (`main`): https://infomed-tcc.vercel.app
+- **Homologação** (`develop`): https://infomed-tcc-git-develop-vinicius-balbinos-projects.vercel.app — endereço fixo que a Vercel cria sozinha para a branch `develop` (não precisa cadastrar domínio).
+- **Preview** (cada PR): o link que a Vercel comenta no PR.
 
-📸 **B04-vercel-git.png** — Production Branch = main.
-📸 **B05-vercel-variaveis.png** — a lista de variáveis com os ambientes (**os valores devem estar escondidos**, como `••••`).
-📸 **B06-vercel-dominios.png** — os domínios, com o de homologação ligado à `develop`.
+1. **Settings → Environments:** a linha *Production* mostra *Branch Tracking* = `main`. ✅
+2. **Settings → Environment Variables (✅ feito pelo BALBINO):** resultado final: cada variável `VITE_...` aparece duas vezes, uma em *Production* e outra em *Preview · develop*. **Atenção:** ao editar, a Vercel **troca** o ambiente em vez de acrescentar; para ter os dois, crie uma entrada para cada ambiente. as duas variáveis do app (`VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`) estão só em **Production**. Para a homologação usar o banco: **⋯ → Edit** em cada uma → a Vercel manda um **código de 6 dígitos para o seu e-mail** → digite o código → em *Environments* clique **Select a Custom Preview Branch** → escolha `develop` → **Save**. Depois, em **Deployments**, abra o último deploy da `develop` → **⋯ → Redeploy**.
+   - Depois do **Redeploy** da `develop`, a homologação passou a usar o Supabase (conferido em 21/11/2026).
+3. **Settings → Deployment Protection:** *Vercel Authentication* foi **desligado**, para o PABLO abrir os links de Preview e a homologação sem conta na Vercel. ✅ Não expõe dados: as previews rodam em modo Mock.
+
+📸 **B04-vercel-ambientes.png** — Production acompanhando a `main`. ✅
+📸 **B05-vercel-variaveis.png** — a lista de variáveis com os **valores escondidos** (`••••`). ✅
+📸 **B06-vercel-deployments.png** — deploys de **Production** (`main`) e **Preview** (`develop` e branches de tarefa). ✅
 
 ### 2.5 Liberar o endereço de homologação no Supabase
-supabase.com → projeto → **Authentication → URL Configuration → Redirect URLs → Add URL** → cole o endereço de homologação com `/**` no fim (ex.: `https://infomed-hml.vercel.app/**`) → **Save**.
+> ✅ **Feito em 21/11/2026.**
+
+**Authentication → URL Configuration → Redirect URLs → Add URL:** `https://infomed-tcc-*-vinicius-balbinos-projects.vercel.app/**` (o `*` cobre a homologação e todos os links de Preview) → **Save URLs**.
+
+📸 **B06b-supabase-redirect-urls.png** ✅
 
 ---
 
@@ -505,7 +518,7 @@ Em `docs/devops/MANUAL-DEVOPS.md`, seção 9, **"Registro de pull requests"**, a
 
 | PR | Branch → destino | Tarefa | Desenvolveu | Abriu o PR | Revisou e aprovou | Data | Resultado |
 |---|---|---|---|---|---|---|---|
-| #1–#3 | várias → `main` | Antes da esteira | balbino-z | balbino-z | — (sem revisão) | 20/11/2026 | Mesclados antes das regras |
+| #1–#6 | várias → `main` / `develop` | Antes da esteira (esteira, relatório, zips, caixa de remédios) | balbino-z | balbino-z | — (só robô Qodo) | 20–21/11/2026 | Mesclados antes das regras |
 | #(nº) | `docs/papeis-do-grupo` → `develop` | Papéis da dupla | Pablo | Pablo | Balbino | (data) | Mesclado |
 | #(nº) | `fix/cabecalhos-seguranca` → `develop` | Cabeçalhos de segurança | Balbino | Balbino | Pablo | (data) | Mesclado |
 | #(nº) | `test/demonstra-ci-vermelho` → `develop` | Demonstração do CI | Pablo | Pablo | — | (data) | Fechado (CI barrou) |
