@@ -2,7 +2,8 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Download, Lock } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { Screen, AppState } from '../../App';
-import { DASHBOARD_PERIODS, type DashboardData } from '../../domain/analytics';
+import { DASHBOARD_PERIODS, type AdherenceDashboard, type DashboardData } from '../../domain/analytics';
+import { PERIOD_LABEL } from '../../domain/adherence';
 import { analyticsRepository } from '../../repositories';
 import { AnalyticsAccessError } from '../../repositories/AnalyticsRepository';
 import { dashboardToCsv, kpiLabel } from '../../features/analytics/dashboardCsv';
@@ -39,6 +40,19 @@ export default function Dashboard({ navigate }: DashboardProps) {
         if (e instanceof AnalyticsAccessError) setDenied(true);
         else setError(e instanceof Error ? e.message : 'Não foi possível carregar o painel.');
       });
+    return () => { active = false; };
+  }, [days]);
+
+  // Adesão vem de outra função (db/10). Se ela ainda não existir no banco, o resto do painel continua.
+  const [adherence, setAdherence] = useState<AdherenceDashboard | null>(null);
+  const [adherenceError, setAdherenceError] = useState('');
+  useEffect(() => {
+    let active = true;
+    setAdherenceError('');
+    analyticsRepository
+      .getAdherence(days)
+      .then((a) => active && setAdherence(a))
+      .catch(() => active && setAdherenceError('Adesão indisponível (rode o db/10_caixa.sql no Supabase).'));
     return () => { active = false; };
   }, [days]);
 
@@ -114,6 +128,40 @@ export default function Dashboard({ navigate }: DashboardProps) {
               <Kpi label={kpiLabel('newUsers')} value={data.kpis.newUsers} />
               <Kpi label={kpiLabel('activeReminders')} value={data.kpis.activeReminders} hint={`${data.kpis.usersWithReminders} usuários`} />
             </div>
+
+            <Card title="Adesão ao tratamento (caixa de remédios + botão Tomei)">
+              {adherenceError && <p className="text-sm text-[#64748B]">{adherenceError}</p>}
+              {!adherence && !adherenceError && <p className="text-sm text-[#64748B]">Carregando...</p>}
+              {adherence && (
+                <>
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <Kpi
+                      label="Adesão geral"
+                      value={adherence.rate === null ? 'oculto' : `${adherence.rate}%`}
+                      hint={adherence.rate === null ? `menos de ${adherence.minGroup} pacientes` : `${adherence.taken} de ${adherence.expected} doses`}
+                    />
+                    <Kpi label="Caixas ativas" value={adherence.devices.active} hint={`${adherence.devices.online} online · ${adherence.devices.tempAlerts} com alerta de temperatura`} />
+                  </div>
+                  <p className="text-xs text-[#64748B] mb-2">Adesão por período: qual horário se esquece mais</p>
+                  <ResponsiveContainer width="100%" height={130}>
+                    <BarChart
+                      data={adherence.byPeriod.map((p) => ({ name: PERIOD_LABEL[p.period], rate: p.rate ?? 0, hidden: p.rate === null }))}
+                      layout="vertical"
+                      margin={{ top: 0, right: 32, left: 0, bottom: 0 }}
+                    >
+                      <XAxis type="number" hide domain={[0, 100]} />
+                      <YAxis type="category" dataKey="name" tick={AXIS} tickLine={false} axisLine={false} width={56} />
+                      <Tooltip cursor={{ fill: '#F7FAFF' }} formatter={(v: number) => `${v}%`} />
+                      <Bar dataKey="rate" name="Adesão" fill={BLUE} radius={[0, 4, 4, 0]} barSize={16}
+                        label={{ position: 'right', fontSize: 11, fill: '#1A2B48', formatter: (v: number) => `${v}%` }} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                  {adherence.byPeriod.some((p) => p.rate === null) && (
+                    <p className="text-[11px] text-[#64748B]">Períodos com menos de {adherence.minGroup} pacientes aparecem zerados para ninguém ser identificado (LGPD).</p>
+                  )}
+                </>
+              )}
+            </Card>
 
             <Card title="Consultas marcadas por semana">
               <ResponsiveContainer width="100%" height={200}>

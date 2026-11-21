@@ -7,6 +7,12 @@ import type { HealthUnitRepository } from './HealthUnitRepository';
 import type { MedicationRepository } from './MedicationRepository';
 import type { ProfileRepository } from './ProfileRepository';
 import type { AnalyticsRepository } from './AnalyticsRepository';
+import type { DeviceRepository } from './DeviceRepository';
+import type { AdherenceRepository } from './AdherenceRepository';
+import { MockDeviceRepository } from './mock/MockDeviceRepository';
+import { MockAdherenceRepository } from './mock/MockAdherenceRepository';
+import { SupabaseDeviceRepository } from './supabase/SupabaseDeviceRepository';
+import { SupabaseAdherenceRepository } from './supabase/SupabaseAdherenceRepository';
 import { MockProfileRepository } from './mock/MockProfileRepository';
 import { MockAnalyticsRepository } from './mock/MockAnalyticsRepository';
 import { SupabaseProfileRepository } from './supabase/SupabaseProfileRepository';
@@ -53,6 +59,15 @@ export const reminderRepository: ReminderRepository = hasSupabase
 export const profileRepository: ProfileRepository = hasSupabase
   ? new SupabaseProfileRepository(supabase!)
   : new MockProfileRepository();
+
+// Caixa de remédios (db/10_caixa.sql)
+export const deviceRepository: DeviceRepository = hasSupabase
+  ? new SupabaseDeviceRepository(supabase!)
+  : new MockDeviceRepository();
+
+export const adherenceRepository: AdherenceRepository = hasSupabase
+  ? new SupabaseAdherenceRepository(supabase!, reminderRepository)
+  : new MockAdherenceRepository(reminderRepository);
 
 export const analyticsRepository: AnalyticsRepository = hasSupabase
   ? new SupabaseAnalyticsRepository(supabase!)

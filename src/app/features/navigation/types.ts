@@ -27,7 +27,8 @@ export type Screen =
   | 'profile'
   | 'triage'
   | 'dashboard'
-  | 'assistant';
+  | 'assistant'
+  | 'medicine-box';
 
 // Dados que passam de uma tela para outra (ex.: o posto escolhido)
 export interface AppState {

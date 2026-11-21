@@ -1,6 +1,6 @@
 import type { Reminder } from '../../domain/reminder';
 import { bus, type DueReminder } from '../notifications/NotificationBus';
-import { isoDateSP, partsInSP } from '../scheduling/dateUtils';
+import { isoDateSP, partsInSP, toStartsAt } from '../scheduling/dateUtils';
 
 const toMin = (hhmm: string) => {
   const [h, m] = hhmm.split(':').map(Number);
@@ -12,7 +12,7 @@ const toMin = (hhmm: string) => {
  * Tolera até 2 minutos de atraso, caso o navegador tenha pausado o relógio da aba.
  * `fired` guarda o que já tocou hoje para não repetir.
  */
-export function dueReminders(reminders: Reminder[], now: Date, fired: Set<string>): DueReminder[] {
+export function dueReminders(reminders: Reminder[], now: Date, fired: Set<string>, offsetMin = 0): DueReminder[] {
   const p = partsInSP(now);
   const nowMin = p.hour * 60 + p.minute;
   const day = isoDateSP(now);
@@ -21,16 +21,24 @@ export function dueReminders(reminders: Reminder[], now: Date, fired: Set<string
   for (const r of reminders) {
     if (!r.active || !r.daysOfWeek.includes(p.weekday)) continue;
     for (const time of r.times) {
-      const diff = nowMin - toMin(time);
-      const key = `${r.id}|${day}|${time}`;
+      const diff = nowMin - toMin(time) - offsetMin;
+      const key = `${r.id}|${day}|${time}|${offsetMin}`;
       if (diff >= 0 && diff <= 2 && !fired.has(key)) {
         fired.add(key);
-        out.push({ reminderId: r.id, label: r.label, time, note: r.note });
+        out.push({
+          reminderId: r.id, label: r.label, time, note: r.note,
+          kind: offsetMin ? 'check' : 'due', scheduledAt: new Date(toStartsAt(day, time)).toISOString(),
+        });
       }
     }
   }
   return out;
 }
+
+/** 30 min depois do horário: candidatos ao aviso "Você tomou?" (só se a dose não foi registrada). */
+export const CHECK_AFTER_MIN = 30;
+export const followUpReminders = (reminders: Reminder[], now: Date, fired: Set<string>) =>
+  dueReminders(reminders, now, fired, CHECK_AFTER_MIN);
 
 /** Observer em ação: confere os lembretes a cada 20 s e PUBLICA "reminder-due" no canal. */
 export class ReminderScheduler {
@@ -43,6 +51,8 @@ export class ReminderScheduler {
     private readonly load: () => Promise<Reminder[]>,
     private readonly intervalMs = 20_000,
     private readonly now: () => Date = () => new Date(),
+    /** Confere se a dose já foi registrada (caixa ou "Tomei"). Sem ela, não há aviso "Você tomou?". */
+    private readonly isTaken?: (reminderId: string, scheduledAt: string) => Promise<boolean>,
   ) {}
 
   private async refresh() {
@@ -64,6 +74,23 @@ export class ReminderScheduler {
           /* alguns navegadores móveis exigem service worker; ignora */
         }
       }
+    }
+    if (!this.isTaken) return;
+    const isTaken = this.isTaken;
+    for (const check of followUpReminders(this.reminders, this.now(), this.fired)) {
+      isTaken(check.reminderId, check.scheduledAt!)
+        .then((taken) => {
+          if (taken) return;
+          bus.emit('reminder-due', check);
+          if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+            try {
+              new Notification('Você tomou o remédio?', { body: `${check.label} das ${check.time}` });
+            } catch {
+              /* ignora */
+            }
+          }
+        })
+        .catch(() => {});
     }
   }
 
