@@ -379,7 +379,8 @@ git push origin develop
 | #9 | `fix/cabecalhos-seguranca` → `develop` | Cabeçalhos de segurança HTTP – achado V04 (Rodada 2) | Balbino | Balbino | Pablo (testou os cabeçalhos na Preview) | 21/11/2026 | Mesclado por Balbino (squash) |
 | #10 | `test/demonstra-ci-vermelho` → `develop` | Demonstração do CI barrando teste quebrado (Rodada 3) | Pablo | Pablo | — | 21/11/2026 | Fechado sem merge (CI barrou; depois verde) |
 | #11 | `develop` → `main` | Release v1.1.0 | — | Balbino | Pablo (testou a homologação) | 21/11/2026 | Mesclado (merge commit) + tag `v1.1.0` + Release no GitHub |
-| #12 | `docs/evidencias-devops` → `develop` | Evidências e registro da esteira | Pablo | Pablo | Balbino | 21/11/2026 | (este PR) |
+| #12 | `docs/evidencias-devops` → `develop` | Evidências e registro da esteira | Pablo | Pablo | Balbino | 21/11/2026 | Mesclado por Balbino |
+| #13 | `docs/evidencias-finais` → `develop` | Prints finais (P02, B10, B11, B13, P13) | Pablo | Pablo | Balbino | 21/11/2026 | (este PR) |
 
 ### Histórico antes da esteira (declarar com transparência)
 
