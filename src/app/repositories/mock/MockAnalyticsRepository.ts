@@ -1,4 +1,4 @@
-import type { DashboardData } from '../../domain/analytics';
+import type { AdherenceDashboard, DashboardData } from '../../domain/analytics';
 import { AnalyticsAccessError, type AnalyticsRepository } from '../AnalyticsRepository';
 import { MockProfileRepository } from './MockProfileRepository';
 
@@ -45,6 +45,32 @@ export class MockAnalyticsRepository implements AnalyticsRepository {
         { name: 'Amoxicilina 500mg', units: 2 },
         { name: 'Sinvastatina 20mg', units: 1 },
       ],
+    };
+  }
+
+  async getAdherence(days: number): Promise<AdherenceDashboard> {
+    if (!(await profiles.getMine()).isAdmin) throw new AnalyticsAccessError('Acesso restrito ao administrador.');
+    if (days < 1 || days > 365) throw new Error('Período deve ser de 1 a 365 dias');
+    const weeks = Math.max(1, Math.min(13, Math.ceil(days / 7)));
+    const to = new Date('2026-11-18T12:00:00-03:00');
+    return {
+      days,
+      minGroup: 5,
+      patients: 16,
+      expected: 900,
+      taken: 702,
+      rate: 78,
+      byPeriod: [
+        { period: 'manha', patients: 14, rate: 86 },
+        { period: 'tarde', patients: 6, rate: 77 },
+        { period: 'noite', patients: 12, rate: 69 },
+      ],
+      byWeek: Array.from({ length: weeks }, (_, i) => ({
+        week: new Date(to.getTime() - (weeks - 1 - i) * 7 * 86_400_000).toISOString().slice(0, 10),
+        patients: 16,
+        rate: 72 + ((i * 5) % 12),
+      })),
+      devices: { active: 3, online: 2, tempAlerts: 1 },
     };
   }
 }

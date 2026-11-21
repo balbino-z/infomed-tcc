@@ -23,3 +23,19 @@ export interface DashboardData {
 }
 
 export const DASHBOARD_PERIODS = [7, 30, 90, 365] as const;
+
+/**
+ * Adesão ao tratamento no BI (função bi_adesao, db/10_caixa.sql). Só agregados:
+ * grupos com menos de `minGroup` pacientes vêm com rate = null (LGPD).
+ */
+export interface AdherenceDashboard {
+  days: number;
+  minGroup: number;
+  patients: number;
+  expected: number | null;
+  taken: number | null;
+  rate: number | null;
+  byPeriod: { period: 'manha' | 'tarde' | 'noite'; patients: number; rate: number | null }[];
+  byWeek: { week: string; patients: number; rate: number | null }[];
+  devices: { active: number; online: number; tempAlerts: number };
+}
