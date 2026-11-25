@@ -143,7 +143,7 @@ export function RemindersList({ navigate }: RemindersListProps) {
     <div className="h-full bg-[#F7FAFF] flex flex-col">
       <Header title="Lembretes" onBack={() => navigate('home')} onNotification={() => navigate('notifications')} />
 
-      <div className="flex-1 overflow-y-auto px-6 py-6 pb-32">
+      <div className="flex-1 overflow-y-auto px-6 py-6 pb-64">
         {permission === 'default' && (
           <button onClick={enableDeviceAlerts} className="w-full mb-4 p-4 bg-[#0A73FF]/10 text-[#0A73FF] rounded-2xl text-left text-sm">
             🔔 Ativar avisos no aparelho. Eles funcionam com o app aberto.
@@ -207,7 +207,7 @@ export function RemindersList({ navigate }: RemindersListProps) {
       <button
         onClick={() => navigate('create-reminder')}
         aria-label="Novo lembrete"
-        className="absolute bottom-24 right-6 w-14 h-14 bg-[#0A73FF] text-white rounded-2xl shadow-lg hover:bg-[#005BEA] transition-all flex items-center justify-center"
+        className="absolute bottom-[11.5rem] right-4 z-30 w-14 h-14 bg-[#0A73FF] text-white rounded-2xl shadow-lg hover:bg-[#005BEA] transition-all flex items-center justify-center"
       >
         <Plus className="w-6 h-6" />
       </button>
